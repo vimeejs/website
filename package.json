@@ -15,7 +15,7 @@
     "@astrojs/react": "^5.0.1",
     "@astrojs/sitemap": "^3.7.1",
     "@tailwindcss/vite": "^4.2.2",
-    "@vimee/core": "^0.1.1",
+    "@vimee/core": "^0.2.0",
     "@vimee/react": "^0.1.2",
     "@vimee/shiki-editor": "^0.1.3",
     "astro": "^6.0.8",
