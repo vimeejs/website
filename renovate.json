@@ -10,7 +10,7 @@
       "minimumReleaseAge": "30 days"
     },
     {
-      "matchPackagePatterns": ["^@vimee/"],
+      "matchPackageNames": ["/^@vimee//"],
       "automerge": true,
       "schedule": ["at any time"]
     }
