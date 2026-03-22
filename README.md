@@ -1,4 +1,4 @@
-# @vimeejs/website
+# vimee.dev
 
 Landing page for [vimee](https://github.com/vimeejs/vimee) — a headless Vim engine for the web.
 
