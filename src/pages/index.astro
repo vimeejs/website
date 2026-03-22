@@ -1,0 +1,146 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import WhatIsVimee from "../components/WhatIsVimee.astro";
+import LiveDemo from "../components/LiveDemo.tsx";
+import Features from "../components/Features.astro";
+import Architecture from "../components/Architecture.astro";
+import Packages from "../components/Packages.astro";
+import QuickStart from "../components/QuickStart.astro";
+import Community from "../components/Community.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout>
+  <!-- Floating ghost that follows scroll from hero to live demo -->
+  <div id="floating-ghost" class="fixed z-50 pointer-events-none" style="top: 30%; left: 50%; transform: translate(-50%, -50%);">
+    <img
+      src="https://assets.vimee.dev/brandresource/vimee.svg"
+      alt="vimee ghost mascot"
+      class="w-14 h-14 md:w-24 md:h-24"
+      loading="eager"
+    />
+    <div
+      id="ghost-speech"
+      class="absolute top-1/2 -translate-y-1/2 left-full ml-3 whitespace-nowrap bg-surface border border-border-subtle rounded-lg px-3 py-1.5 text-xs font-mono text-text-code opacity-0 transition-opacity duration-500"
+    >
+      Try the demo!
+    </div>
+  </div>
+
+  <main>
+    <Hero />
+    <div class="h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent"></div>
+    <WhatIsVimee />
+    <div class="h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent"></div>
+
+    <section id="demo" class="py-24 md:py-32 px-6 relative" data-animate>
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-3xl md:text-5xl font-bold text-center mb-4">Live Demo</h2>
+        <p class="text-lg text-text-primary/60 text-center mb-12">
+          A real Vim editor. Right here in the browser.
+        </p>
+        <LiveDemo client:only="react" />
+        <!-- Ghost arrives here via scroll -->
+        <div id="ghost-destination" class="flex justify-end mt-6 h-20 md:h-28"></div>
+      </div>
+    </section>
+
+    <div class="h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent"></div>
+    <Features />
+    <div class="h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent"></div>
+    <Architecture />
+    <div class="h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent"></div>
+    <Packages />
+    <div class="h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent"></div>
+    <QuickStart />
+    <div class="h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent"></div>
+    <Community />
+  </main>
+  <Footer />
+
+  <script>
+    const ghost = document.getElementById("floating-ghost") as HTMLElement;
+    const speech = document.getElementById("ghost-speech") as HTMLElement;
+    const dest = document.getElementById("ghost-destination") as HTMLElement;
+
+    const heroTitle = document.querySelector("#hero h1") as HTMLElement;
+
+    if (ghost && dest && speech && heroTitle) {
+
+      function updateGhost() {
+        const scrollY = window.scrollY;
+        const destRect = dest.getBoundingClientRect();
+        const destAbsY = destRect.top + scrollY;
+        const destAbsX = destRect.right - dest.offsetWidth * 0.5;
+
+        // Arrive early: ghost reaches destination by ~50% of the scroll distance
+        const travelDist = destAbsY * 0.5;
+        const progress = Math.min(1, Math.max(0, scrollY / travelDist));
+
+        // Ghost starts just above the h1 title, centered
+        const titleRect = heroTitle.getBoundingClientRect();
+        const ghostSize = ghost.offsetHeight;
+        const startX = titleRect.left + titleRect.width / 2;
+        const startY = titleRect.top - ghostSize * 0.6;
+        const endX = destAbsX;
+        const endY = destAbsY - scrollY + destRect.height / 2;
+
+        const x = startX + (endX - startX) * progress;
+        const y = startY + (endY - startY) * progress;
+
+        const time = performance.now() * 0.001;
+        const bobY = Math.sin(time * 1.2) * 8;
+        const driftX = Math.sin(time * 0.7) * 20;
+
+        // Phases:
+        // 0~0.15: hero — visible, flickering, slowly fading out
+        // 0.15~0.85: gone — invisible, already waiting at destination
+        // 0.85~1: destination — slowly fading in
+        // 1+: fully visible with bob & drift
+        let opacity: number;
+        let posX: number;
+        let posY: number;
+
+        const flicker = 0.5 + 0.5 * Math.cos(time * 1.8);
+
+        if (progress < 0.15) {
+          // Hero: fade out gradually
+          const fadeOut = 1 - progress / 0.15;
+          opacity = fadeOut * (0.4 + 0.6 * flicker);
+          posX = startX + driftX;
+          posY = startY + bobY;
+        } else if (progress < 0.85) {
+          // In transit: invisible, parked at destination
+          opacity = 0;
+          posX = endX;
+          posY = endY + bobY;
+        } else {
+          // Arriving: fade in slowly
+          const fadeIn = (progress - 0.85) / 0.15;
+          opacity = fadeIn;
+          posX = endX + driftX * 0.5;
+          posY = endY + bobY;
+        }
+
+        ghost.style.left = `${posX}px`;
+        ghost.style.top = `${posY}px`;
+        ghost.style.transform = "translate(-50%, -50%)";
+        ghost.style.opacity = String(opacity);
+
+        // Speech bubble fades in after ghost fully appears
+        speech.style.opacity = progress >= 1 ? "1" : "0";
+
+        // Hide after scrolling past demo section
+        if (destRect.bottom < 0) {
+          ghost.style.opacity = "0";
+          speech.style.opacity = "0";
+        }
+
+        requestAnimationFrame(updateGhost);
+      }
+
+      requestAnimationFrame(updateGhost);
+    }
+  </script>
+</Layout>

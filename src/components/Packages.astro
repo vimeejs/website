@@ -1,0 +1,106 @@
+---
+const packages = [
+  {
+    name: "@vimee/core",
+    description:
+      "Headless Vim engine. Zero dependencies, framework agnostic. The pure-function core that powers everything.",
+    install: "npm install @vimee/core",
+  },
+  {
+    name: "@vimee/react",
+    description:
+      "React hooks for Vim. useVim() returns content, cursor, mode, and a key handler. Thin reactive wrapper.",
+    install: "npm install @vimee/react",
+  },
+  {
+    name: "@vimee/shiki-editor",
+    description:
+      "Drop-in code editor with Shiki syntax highlighting. One component, full Vim experience.",
+    install: "npm install @vimee/shiki-editor",
+  },
+  {
+    name: "@vimee/plugin-textarea",
+    description:
+      "Vim mode for any textarea. attach() and go. Works with vanilla JS, shadcn/ui, or anything.",
+    install: "npm install @vimee/plugin-textarea",
+  },
+];
+---
+
+<section id="packages" class="py-24 md:py-32 px-6" data-animate>
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-3xl md:text-5xl font-bold text-center mb-4">Packages</h2>
+    <p class="text-lg text-text-primary/60 text-center mb-12">
+      A modular ecosystem. Use only what you need.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {
+        packages.map((pkg) => (
+          <div class="bg-surface border border-border-subtle rounded-xl p-6 hover:border-accent-purple/30 transition-all duration-300">
+            <h3 class="text-lg font-semibold font-mono text-accent-purple mb-2">
+              {pkg.name}
+            </h3>
+            <p class="text-sm text-text-primary/60 leading-relaxed mb-4">
+              {pkg.description}
+            </p>
+            <div class="relative flex items-center bg-bg-primary rounded-lg px-4 py-2">
+              <code class="font-mono text-sm text-text-code flex-1">
+                {pkg.install}
+              </code>
+              <button
+                class="copy-btn ml-2 p-1 text-text-primary/40 hover:text-text-primary transition-colors shrink-0"
+                data-install={pkg.install}
+                aria-label={`Copy install command for ${pkg.name}`}
+              >
+                <svg class="icon-clipboard w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+                <svg class="icon-check w-4 h-4 hidden text-accent-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>(".copy-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      const command = btn.dataset.install;
+      if (!command) return;
+
+      try {
+        await navigator.clipboard.writeText(command);
+      } catch {
+        // Fallback for older browsers
+        const textarea = document.createElement("textarea");
+        textarea.value = command;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+
+      const clipboardIcon = btn.querySelector(".icon-clipboard") as HTMLElement;
+      const checkIcon = btn.querySelector(".icon-check") as HTMLElement;
+
+      if (clipboardIcon && checkIcon) {
+        clipboardIcon.classList.add("hidden");
+        checkIcon.classList.remove("hidden");
+
+        setTimeout(() => {
+          clipboardIcon.classList.remove("hidden");
+          checkIcon.classList.add("hidden");
+        }, 1500);
+      }
+    });
+  });
+</script>

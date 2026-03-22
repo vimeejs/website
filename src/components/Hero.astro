@@ -1,0 +1,53 @@
+---
+---
+
+<section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+  <div id="smoke-canvas" class="absolute inset-0 -z-10"></div>
+  <div class="absolute bottom-0 left-0 right-0 h-[30%] md:h-80 bg-gradient-to-t from-bg-primary from-20% to-transparent -z-[5]"></div>
+
+  <div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+    <h1 class="hero-title text-7xl md:text-9xl tracking-tight mb-6" style="font-family: 'Jersey 15', sans-serif;">
+      vimee
+    </h1>
+    <p class="text-xl md:text-2xl text-accent-ghost mb-4">
+      Headless Vim Engine for the Web
+    </p>
+    <p class="text-lg text-text-primary/60 mb-12">
+      Pure functions. Zero dependencies. Any framework.
+    </p>
+    <div class="flex gap-4 justify-center">
+      <a
+        href="#quickstart"
+        class="inline-flex items-center bg-accent-purple hover:brightness-110 hover:scale-105 transition-all duration-200 text-white font-semibold rounded-lg px-8 py-3"
+      >
+        Get Started
+      </a>
+      <a
+        href="https://github.com/vimeejs/vimee"
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center border border-white/20 hover:border-white/40 hover:bg-white/5 transition-all duration-200 text-text-primary font-semibold rounded-lg px-8 py-3"
+      >
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-title {
+    text-shadow:
+      0 0 40px rgba(168, 130, 255, 0.3),
+      0 0 80px rgba(168, 130, 255, 0.1);
+  }
+</style>
+
+<script>
+  import { initPhantomSmoke } from "./PhantomSmoke";
+  const container = document.getElementById("smoke-canvas");
+  if (container) {
+    const cleanup = initPhantomSmoke(container);
+    // Clean up on page navigation (Astro view transitions)
+    document.addEventListener("astro:before-swap", cleanup, { once: true });
+  }
+</script>

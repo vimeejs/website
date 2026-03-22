@@ -1,0 +1,52 @@
+---
+import { Code } from "astro:components";
+import QuickStartEditor from "./QuickStartEditor.tsx";
+
+const installCode = `npm install @vimee/core @vimee/react @vimee/shiki-editor shiki`;
+---
+
+<section id="quickstart" class="py-24 md:py-32 px-6" data-animate>
+  <div class="max-w-3xl mx-auto text-center">
+    <h2 class="text-3xl md:text-5xl font-bold mb-4">Quick Start</h2>
+    <p class="text-lg text-text-primary/60 mb-12">
+      Install. Import. Done. Just a few lines.
+    </p>
+
+    <div class="text-left space-y-4">
+      <div class="bg-surface border border-border-subtle rounded-xl p-5">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-7 h-7 rounded-full bg-accent-purple text-white text-xs font-bold flex items-center justify-center shrink-0">1</div>
+          <span class="text-sm font-semibold text-text-primary">Install</span>
+        </div>
+        <div class="quickstart-code rounded-lg overflow-x-auto">
+          <Code code={installCode} lang="bash" theme="catppuccin-mocha" />
+        </div>
+      </div>
+
+      <div class="bg-surface border border-border-subtle rounded-xl p-5">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-7 h-7 rounded-full bg-accent-purple text-white text-xs font-bold flex items-center justify-center shrink-0">2</div>
+          <span class="text-sm font-semibold text-text-primary">Build your editor</span>
+        </div>
+        <div class="rounded-lg overflow-hidden">
+          <QuickStartEditor client:only="react" />
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-8 text-text-primary/40 text-sm">That's it. A full Vim editor in a few lines.</p>
+  </div>
+</section>
+
+<style>
+  .quickstart-code :global(pre) {
+    background: transparent !important;
+    margin: 0;
+    padding: 0.5rem;
+    overflow-x: auto;
+  }
+  .quickstart-code :global(code) {
+    font-size: 0.8125rem;
+    line-height: 1.6;
+  }
+</style>
