@@ -144,3 +144,8 @@ vite.config.ts.timestamp-*
 # Superpowers
 .superpowers/
 docs/superpowers/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
