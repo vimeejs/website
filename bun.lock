@@ -1,6 +1,5 @@
 {
   "lockfileVersion": 1,
-  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "@vimeejs/website",
@@ -11,7 +10,7 @@
         "@tailwindcss/vite": "4.2.2",
         "@vimee/core": "0.2.0",
         "@vimee/react": "0.2.0",
-        "@vimee/shiki-editor": "0.1.3",
+        "@vimee/shiki-editor": "0.2.0",
         "astro": "6.0.8",
         "ogl": "1.0.11",
         "react": "19.2.4",
@@ -370,7 +369,7 @@
 
     "@vimee/react": ["@vimee/react@0.2.0", "", { "peerDependencies": { "@vimee/core": ">=0.1.0", "react": ">=18.0.0" } }, "sha512-s17NVrnzRq05k9TDtRWYFDfhXlELC4QJI9ItXVqa7+4zSknBLg3NewxpnlLe3bvY9bof7jo2pO0+McgZrq+jmQ=="],
 
-    "@vimee/shiki-editor": ["@vimee/shiki-editor@0.1.3", "", { "peerDependencies": { "@vimee/core": ">=0.1.0", "@vimee/react": ">=0.1.0", "react": ">=18.0.0", "react-dom": ">=18.0.0", "shiki": ">=1.0.0" } }, "sha512-u1X5EeojxgOCCCpo/nkbp5KRCeDEND1qbeeRz85aMR8qV+MrgTXaQKMnEayHYTOpigeMUsSUxEFEO3JFc92J6A=="],
+    "@vimee/shiki-editor": ["@vimee/shiki-editor@0.2.0", "", { "peerDependencies": { "@vimee/core": ">=0.1.0", "@vimee/react": ">=0.1.0", "react": ">=18.0.0", "react-dom": ">=18.0.0", "shiki": ">=1.0.0" } }, "sha512-wy3tfCsqcdEfpDJJezy6NB85bd6/DBT2SeOBYAE41OuFaLsnTFDODxrqg/6bUJpkIvoodSREXwwFJ5N49p6o0A=="],
 
     "@vitejs/plugin-react": ["@vitejs/plugin-react@5.2.0", "", { "dependencies": { "@babel/core": "^7.29.0", "@babel/plugin-transform-react-jsx-self": "^7.27.1", "@babel/plugin-transform-react-jsx-source": "^7.27.1", "@rolldown/pluginutils": "1.0.0-rc.3", "@types/babel__core": "^7.20.5", "react-refresh": "^0.18.0" }, "peerDependencies": { "vite": "^4.2.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0" } }, "sha512-YmKkfhOAi3wsB1PhJq5Scj3GXMn3WvtQ/JC0xoopuHoXSdmtdStOpFrYaT1kie2YgFBcIe64ROzMYRjCrYOdYw=="],
 
