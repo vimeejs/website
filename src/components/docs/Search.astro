@@ -29,8 +29,9 @@
 
   async function loadPagefind() {
     try {
-      // @ts-ignore — Pagefind is loaded from built assets
-      const pagefind = await import("/pagefind/pagefind.js");
+      // Pagefind only exists after build — use string concat to avoid Vite's static analysis
+      const pagefindPath = "/pagefind/pagefind.js";
+      const pagefind = await import(/* @vite-ignore */ pagefindPath);
       await pagefind.init();
       if (!container) return;
 
