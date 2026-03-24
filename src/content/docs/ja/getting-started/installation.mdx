@@ -7,46 +7,46 @@ sidebar:
 
 ## コアパッケージのインストール
 
-import { Tabs, TabItem } from "@astrojs/starlight/components";
+import Tabs from "../../../../components/docs/Tabs.astro";
 
-<Tabs>
-  <TabItem label="npm">
+<Tabs labels={["npm", "pnpm", "bun"]}>
+  <div class="tab-panel">
     ```bash
     npm install @vimee/core
     ```
-  </TabItem>
-  <TabItem label="pnpm">
+  </div>
+  <div class="tab-panel">
     ```bash
     pnpm add @vimee/core
     ```
-  </TabItem>
-  <TabItem label="bun">
+  </div>
+  <div class="tab-panel">
     ```bash
     bun add @vimee/core
     ```
-  </TabItem>
+  </div>
 </Tabs>
 
 ## React と一緒に
 
 React を使用している場合は、React バインディングもインストールしてください：
 
-<Tabs>
-  <TabItem label="npm">
+<Tabs labels={["npm", "pnpm", "bun"]}>
+  <div class="tab-panel">
     ```bash
     npm install @vimee/core @vimee/react
     ```
-  </TabItem>
-  <TabItem label="pnpm">
+  </div>
+  <div class="tab-panel">
     ```bash
     pnpm add @vimee/core @vimee/react
     ```
-  </TabItem>
-  <TabItem label="bun">
+  </div>
+  <div class="tab-panel">
     ```bash
     bun add @vimee/core @vimee/react
     ```
-  </TabItem>
+  </div>
 </Tabs>
 
 ## エディター UI と一緒に
