@@ -464,6 +464,10 @@ import LiveDemo from "../../components/landing/LiveDemo";
         transform: translateY(16px);
         transition: opacity 0.6s ease, transform 0.6s ease;
       }
+      /* shiki-editor expects content-box for cursor alignment */
+      .demo-container .sv-line-number {
+        box-sizing: content-box;
+      }
       .demo-container.revealed {
         opacity: 1;
         transform: translateY(0);
