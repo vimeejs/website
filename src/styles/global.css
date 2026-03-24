@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+/* Dark theme (default) — registered as Tailwind theme tokens */
 @theme {
   --color-bg-primary: #0a0a10;
   --color-bg-surface: #12121c;
@@ -17,16 +18,19 @@
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 }
 
-.light {
-  --color-bg-primary: #fafafa;
-  --color-bg-surface: #ffffff;
-  --color-bg-surface-hover: #f0f0f5;
-  --color-border: rgba(0, 0, 0, 0.1);
-  --color-border-active: rgba(0, 0, 0, 0.2);
-  --color-text: #1a1a2e;
-  --color-text-dim: rgba(26, 26, 46, 0.55);
-  --color-text-code: #7c3aed;
-  --color-accent: hsl(280, 82%, 50%);
-  --color-accent-dim: hsl(280, 60%, 90%);
-  --color-accent-bright: hsl(280, 82%, 35%);
+/* Light theme — override via higher-specificity selector */
+@layer base {
+  :root.light {
+    --color-bg-primary: #fafafa;
+    --color-bg-surface: #ffffff;
+    --color-bg-surface-hover: #f0f0f5;
+    --color-border: rgba(0, 0, 0, 0.1);
+    --color-border-active: rgba(0, 0, 0, 0.2);
+    --color-text: #1a1a2e;
+    --color-text-dim: rgba(26, 26, 46, 0.55);
+    --color-text-code: #7c3aed;
+    --color-accent: hsl(280, 82%, 50%);
+    --color-accent-dim: hsl(280, 60%, 90%);
+    --color-accent-bright: hsl(280, 82%, 35%);
+  }
 }
