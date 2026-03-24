@@ -15,7 +15,10 @@ const altPath = getAlternateLocalePath(currentPath, altLocale);
 <header class="sticky top-0 z-40 border-b border-border bg-bg-primary/80 backdrop-blur-sm">
   <div class="flex items-center justify-between h-14 px-4 lg:px-6">
     <div class="flex items-center gap-6">
-      <a href={`/${locale}/`} class="font-mono font-semibold text-sm">vimee</a>
+      <a href={`/${locale}/`} class="flex items-center gap-1.5 font-mono font-semibold text-sm">
+        <img src="https://assets.vimee.dev/brandresource/vimee.svg" alt="" width="20" height="20" />
+        vimee
+      </a>
       <nav class="hidden md:flex items-center gap-4 text-sm text-text-dim">
         <a href={`/${locale}/getting-started/`} class="hover:text-text transition-colors">Getting Started</a>
         <a href={`/${locale}/packages/core/`} class="hover:text-text transition-colors">Packages</a>
