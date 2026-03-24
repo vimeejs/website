@@ -201,7 +201,7 @@ import LiveDemo from "../../components/landing/LiveDemo";
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&display=swap");
 
-      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      *, *::before, *::after { box-sizing: border-box; }
 
       :root {
         --bg: #050508;
@@ -220,8 +220,11 @@ import LiveDemo from "../../components/landing/LiveDemo";
         font-family: var(--sans);
         color: var(--text);
         line-height: 1.6;
+        margin: 0;
+        padding: 0;
         overflow-x: hidden;
       }
+      h1, h2, h3, p, ul, ol { margin: 0; padding: 0; }
       a { color: inherit; text-decoration: none; }
 
       /* ══ HERO ══ */
@@ -460,14 +463,6 @@ import LiveDemo from "../../components/landing/LiveDemo";
         opacity: 0;
         transform: translateY(16px);
         transition: opacity 0.6s ease, transform 0.6s ease;
-        /* Reset styles that leak into shiki-editor */
-        line-height: normal;
-        font-size: initial;
-      }
-      .demo-container * {
-        box-sizing: content-box;
-        margin: revert;
-        padding: revert;
       }
       .demo-container.revealed {
         opacity: 1;
