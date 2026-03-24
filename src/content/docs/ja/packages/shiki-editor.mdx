@@ -1,29 +1,38 @@
 ---
 title: "@vimee/shiki-editor"
-description: Shiki を使用した構文ハイライト Vim エディター
+description: Shiki による構文ハイライト付き Vim エディター
 sidebar:
   order: 2
 ---
 
-[Shiki](https://shiki.matsu.io/) による構文ハイライト付きのフル機能 Vim エディターコンポーネント。
+[Shiki](https://shiki.style/) による構文ハイライト付きのフル機能 Vim エディターコンポーネント。
 
 ## インストール
 
 ```bash
-npm install @vimee/core @vimee/react @vimee/shiki-editor
+npm install @vimee/core @vimee/react @vimee/shiki-editor shiki
 ```
 
 ## 使い方
 
 ```tsx
-import { ShikiEditor } from "@vimee/shiki-editor";
+import { Vim } from "@vimee/shiki-editor";
+import { createHighlighter } from "shiki";
+import "@vimee/shiki-editor/styles.css";
+
+const highlighter = await createHighlighter({
+  themes: ["github-dark"],
+  langs: ["typescript"],
+});
 
 function App() {
   return (
-    <ShikiEditor
-      initialContent="const hello = 'world';"
-      language="typescript"
+    <Vim
+      content="const hello = 'world';"
+      highlighter={highlighter}
+      lang="typescript"
       theme="github-dark"
+      onChange={(content) => console.log(content)}
     />
   );
 }
@@ -31,9 +40,43 @@ function App() {
 
 ## Props
 
-| Prop | 型 | 説明 |
-|------|------|-------------|
-| `initialContent` | `string` | 初期エディターコンテンツ |
-| `language` | `string` | Shiki 言語識別子 |
-| `theme` | `string` | Shiki テーマ名 |
-| `onChange` | `(content: string) => void` | コンテンツ変更時のコールバック |
+| Prop | 型 | デフォルト | 説明 |
+|------|------|---------|-------------|
+| `content` | `string` | （必須） | エディターコンテンツ |
+| `highlighter` | `HighlighterGeneric` | （必須） | Shiki ハイライターインスタンス |
+| `lang` | `string` | （必須） | 言語識別子 |
+| `theme` | `string` | （必須） | Shiki テーマ名 |
+| `shikiOptions` | `Record<string, unknown>` | — | 追加の Shiki オプション |
+| `cursorPosition` | `string` | `"1:1"` | 初期カーソル位置（1ベース） |
+| `onChange` | `(content: string) => void` | — | コンテンツ変更コールバック |
+| `onYank` | `(text: string) => void` | — | ヤンクコールバック |
+| `onSave` | `(content: string) => void` | — | 保存コールバック |
+| `onModeChange` | `(mode: VimMode) => void` | — | モード変更コールバック |
+| `onAction` | `(action: VimAction, key: string) => void` | — | アクションコールバック |
+| `className` | `string` | — | コンテナ CSS クラス |
+| `readOnly` | `boolean` | `false` | 編集を無効にする |
+| `autoFocus` | `boolean` | `false` | マウント時に自動フォーカス |
+| `indentStyle` | `"space" \| "tab"` | `"space"` | インデント文字 |
+| `indentWidth` | `number` | `2` | インデント幅 |
+| `showLineNumbers` | `boolean` | `true` | 行番号を表示 |
+
+## サブコンポーネント
+
+このパッケージは、カスタムレイアウト用の個別サブコンポーネントもエクスポートしています：
+
+- `<Cursor />` — エディターカーソルをレンダリング
+- `<Line />` — ハイライトされた1行をレンダリング
+- `<StatusLine />` — Vim ステータスバーをレンダリング
+
+## フック
+
+- `useShikiTokens(highlighter, content, lang, theme, extraOptions?)` — Shiki でコンテンツをトークナイズ
+- `computeSelectionInfo(cursor, visualAnchor, buffer)` — ビジュアル選択範囲を計算
+
+## CSS
+
+ベーススタイルをインポート：
+
+```ts
+import "@vimee/shiki-editor/styles.css";
+```

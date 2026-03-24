@@ -1,6 +1,6 @@
 ---
 title: "@vimee/plugin-codemirror"
-description: vimee の CodeMirror 統合
+description: CodeMirror 6 向け Vim キーバインド
 sidebar:
   order: 5
 ---
@@ -11,4 +11,39 @@ vimee の Vim エンジンを [CodeMirror 6](https://codemirror.net/) と統合�
 
 ```bash
 npm install @vimee/core @vimee/plugin-codemirror
+```
+
+## 使い方
+
+```ts
+import { EditorView, basicSetup } from "codemirror";
+import { attach } from "@vimee/plugin-codemirror";
+
+const view = new EditorView({
+  doc: "console.log('hello');",
+  extensions: [basicSetup],
+  parent: document.getElementById("editor")!,
+});
+
+const vim = attach(view, {
+  onChange: (value) => console.log("Content:", value),
+  onModeChange: (mode) => console.log("Mode:", mode),
+});
+
+// 後でクリーンアップ
+vim.destroy();
+```
+
+## API
+
+### `attach(view, options?)`
+
+`@vimee/plugin-textarea` と同じオプション。`.getMode()`、`.getCursor()`、`.getContent()`、`.destroy()` と同じインターフェースの `VimCodeMirror` を返します。
+
+### カーソルユーティリティ
+
+```ts
+import { cursorToOffset, offsetToCursor } from "@vimee/plugin-codemirror";
+
+// vimee の {line, col} と CodeMirror の文字オフセットを変換
 ```

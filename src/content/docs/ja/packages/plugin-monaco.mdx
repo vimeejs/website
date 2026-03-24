@@ -1,6 +1,6 @@
 ---
 title: "@vimee/plugin-monaco"
-description: vimee の Monaco Editor 統合
+description: Monaco Editor 向け Vim キーバインド
 sidebar:
   order: 4
 ---
@@ -11,4 +11,43 @@ vimee の Vim エンジンを [Monaco Editor](https://microsoft.github.io/monaco
 
 ```bash
 npm install @vimee/core @vimee/plugin-monaco
+```
+
+## 使い方
+
+```ts
+import * as monaco from "monaco-editor";
+import { attach } from "@vimee/plugin-monaco";
+
+const editor = monaco.editor.create(document.getElementById("editor")!, {
+  value: "console.log('hello');",
+  language: "typescript",
+});
+
+const vim = attach(editor, {
+  onChange: (value) => console.log("Content:", value),
+  onModeChange: (mode) => console.log("Mode:", mode),
+});
+
+// 後でクリーンアップ
+vim.destroy();
+```
+
+## API
+
+### `attach(editor, options?)`
+
+`@vimee/plugin-textarea` と同じオプション。`.getMode()`、`.getCursor()`、`.getContent()`、`.destroy()` と同じインターフェースの `VimMonaco` を返します。
+
+### カーソルユーティリティ
+
+```ts
+import { cursorToMonacoPosition, monacoPositionToCursor } from "@vimee/plugin-monaco";
+
+// vimee は0ベースの位置を使用、Monaco は1ベースを使用
+const monacoPos = cursorToMonacoPosition({ line: 0, col: 5 });
+// { lineNumber: 1, column: 6 }
+
+const vimeePos = monacoPositionToCursor({ lineNumber: 1, column: 6 });
+// { line: 0, col: 5 }
 ```

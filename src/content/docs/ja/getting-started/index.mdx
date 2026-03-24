@@ -1,17 +1,17 @@
 ---
 title: 概要
-description: vimee を使い始める - Web 向けヘッドレス Vim エンジン
+description: vimee を使い始める — Web 向けヘッドレス Vim エンジン
 sidebar:
   order: 0
 ---
 
-**vimee** は、純粋関数と依存なしで構築されたヘッドレス Vim エンジンです。フレームワークを問わず、あらゆる Web アプリケーションに完全な Vim 編集体験を組み込むことができます。
+**vimee** は、純粋関数とゼロ依存で構築されたヘッドレス Vim エンジンです。フレームワークを問わず、あらゆる Web アプリケーションに完全な Vim 編集体験を組み込むことができます。
 
 ## なぜ vimee？
 
 - **純粋関数** — すべての操作が純粋関数。状態を入力し、新しい状態を出力。副作用なし。
-- **依存なし** — コアエンジンに外部依存はなく、バンドルサイズを最小限に保ちます。
-- **フレームワーク非依存** — React、Vue、Svelte、その他あらゆるフレームワークで動作します。
+- **ゼロ依存** — コアエンジンに外部依存はなく、バンドルサイズを最小限に保ちます。
+- **フレームワーク非依存** — React、Vue、Svelte、その他あらゆるフレームワークで動作します。UIは自由に構築できます。
 - **テスタブル** — 純粋関数は簡単にテストできます。`@vimee/testkit` でエルゴノミックなテストが可能です。
 
 ## クイックスタート
@@ -21,14 +21,18 @@ npm install @vimee/core
 ```
 
 ```ts
-import { createEditor, processKey } from "@vimee/core";
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
 
-const editor = createEditor({ content: "Hello, vimee!" });
-const next = processKey(editor, { key: "x" });
+const buffer = new TextBuffer("Hello, vimee!");
+const ctx = createInitialContext({ line: 0, col: 0 });
+
+// キーストロークを処理 — 新しいコンテキストとアクションを返す
+const { newCtx, actions } = processKeystroke("x", ctx, buffer);
+// buffer.getContent() === "ello, vimee!"
 ```
 
 ## 次のステップ
 
-- [インストール](/ja/getting-started/installation/) — 詳細なインストール手順
-- [クイックスタート](/ja/getting-started/quickstart/) — 最初の vimee インテグレーションを作る
-- [パッケージ](/ja/packages/core/) — 利用可能なパッケージを探索する
+- [インストール](./installation/) — 詳細なインストール手順
+- [クイックスタート](./quickstart/) — 最初の vimee インテグレーションを構築する
+- [パッケージ](../packages/core/) — 利用可能なパッケージを探索する

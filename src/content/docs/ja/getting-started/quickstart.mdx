@@ -7,19 +7,18 @@ sidebar:
 
 ## 純粋関数での基本的な使い方
 
-vimee のコア API は純粋関数を中心に構築されています。エディター状態を作成し、キーイベントで変換します：
+vimee のコア API は純粋関数を中心に構築されています。バッファとコンテキストを作成し、キーストロークを処理します：
 
 ```ts
-import { createEditor, processKey } from "@vimee/core";
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
 
-// 初期エディター状態を作成
-const editor = createEditor({
-  content: "Hello, World!",
-});
+// テキストバッファと初期 Vim コンテキストを作成
+const buffer = new TextBuffer("Hello, World!");
+const ctx = createInitialContext({ line: 0, col: 0 });
 
-// キーイベントを処理 — 新しい状態を返す（ミューテーションなし）
-const state1 = processKey(editor, { key: "l" }); // 右に移動
-const state2 = processKey(state1, { key: "x" }); // 文字を削除
+// キーストロークを処理 — それぞれ新しいコンテキストとアクションのリストを返す
+const result1 = processKeystroke("l", ctx, buffer);     // 右に移動
+const result2 = processKeystroke("x", result1.newCtx, buffer); // 文字を削除
 ```
 
 ## React と一緒に
@@ -27,17 +26,17 @@ const state2 = processKey(state1, { key: "x" }); // 文字を削除
 `@vimee/react` でシームレスな React 統合：
 
 ```tsx
-import { useVimEditor } from "@vimee/react";
+import { useVim } from "@vimee/react";
 
 function MyEditor() {
-  const { state, onKeyDown } = useVimEditor({
-    initialContent: "Hello, vimee!",
+  const { content, cursor, mode, handleKeyDown } = useVim({
+    content: "Hello, vimee!",
   });
 
   return (
-    <div onKeyDown={onKeyDown} tabIndex={0}>
-      <pre>{state.content}</pre>
-      <span>Mode: {state.mode}</span>
+    <div onKeyDown={handleKeyDown} tabIndex={0}>
+      <pre>{content}</pre>
+      <span>Mode: {mode} | Cursor: {cursor.line}:{cursor.col}</span>
     </div>
   );
 }
@@ -48,13 +47,21 @@ function MyEditor() {
 構文ハイライト付きのフル機能エディター：
 
 ```tsx
-import { ShikiEditor } from "@vimee/shiki-editor";
+import { Vim } from "@vimee/shiki-editor";
+import { createHighlighter } from "shiki";
+import "@vimee/shiki-editor/styles.css";
+
+const highlighter = await createHighlighter({
+  themes: ["github-dark"],
+  langs: ["typescript"],
+});
 
 function App() {
   return (
-    <ShikiEditor
-      initialContent="console.log('Hello!');"
-      language="typescript"
+    <Vim
+      content="console.log('Hello!');"
+      highlighter={highlighter}
+      lang="typescript"
       theme="github-dark"
     />
   );
