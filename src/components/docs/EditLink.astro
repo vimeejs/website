@@ -1,0 +1,14 @@
+---
+interface Props {
+  entryId: string;
+}
+
+const { entryId } = Astro.props;
+const editUrl = `https://github.com/vimeejs/website/edit/main/src/content/docs/${entryId}`;
+---
+
+<div class="mt-6 pt-4 border-t border-border">
+  <a href={editUrl} target="_blank" rel="noopener" class="text-xs text-text-dim hover:text-text transition-colors">
+    Edit this page on GitHub ↗
+  </a>
+</div>
