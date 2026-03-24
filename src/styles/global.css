@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* Dark theme (default) — registered as Tailwind theme tokens */
 @theme {
