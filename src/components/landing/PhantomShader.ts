@@ -78,19 +78,19 @@ const fragment = /* glsl */ `
 
     smoke *= vignette * vertFade;
 
-    // Subdued purple palette — less toxic, more atmospheric
-    vec3 deepVoid = vec3(0.02, 0.02, 0.035);
-    vec3 phantom  = vec3(0.18, 0.10, 0.28);
-    vec3 wisp     = vec3(0.28, 0.18, 0.42);
-    vec3 ethereal = vec3(0.40, 0.30, 0.55);
+    // Soft purple palette — white-mixed, gentle atmosphere
+    vec3 deepVoid = vec3(0.03, 0.03, 0.05);
+    vec3 phantom  = vec3(0.22, 0.18, 0.32);
+    vec3 wisp     = vec3(0.38, 0.32, 0.50);
+    vec3 ethereal = vec3(0.55, 0.50, 0.65);
 
     vec3 col = deepVoid;
     col = mix(col, phantom, smoothstep(-0.2, 0.3, smoke));
-    col = mix(col, wisp, smoothstep(0.2, 0.6, smoke) * 0.4);
-    col = mix(col, ethereal, smoothstep(0.5, 0.8, smoke) * 0.15);
+    col = mix(col, wisp, smoothstep(0.2, 0.6, smoke) * 0.35);
+    col = mix(col, ethereal, smoothstep(0.5, 0.8, smoke) * 0.2);
 
-    float highlight = smoothstep(0.55, 0.75, smoke) * vignette * 0.08;
-    col += ethereal * highlight;
+    float highlight = smoothstep(0.5, 0.7, smoke) * vignette * 0.12;
+    col += vec3(0.7, 0.65, 0.8) * highlight;
 
     gl_FragColor = vec4(col, 1.0);
   }
