@@ -1,4 +1,4 @@
-import { use, useState, useCallback, useRef, useEffect } from "react";
+import { use, useState, useCallback } from "react";
 import { Vim } from "@vimee/shiki-editor";
 import { createHighlighter } from "shiki";
 import "@vimee/shiki-editor/styles.css";
@@ -36,31 +36,22 @@ export default function LiveDemo() {
   const highlighter = use(highlighterPromise);
   const [content, setContent] = useState(initialContent);
   const [key, setKey] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const handleYank = useCallback((text: string) => {
     navigator.clipboard.writeText(text).catch(() => {});
   }, []);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    const handlePaste = (e: ClipboardEvent) => {
-      const text = e.clipboardData?.getData("text/plain");
-      if (text) {
-        e.preventDefault();
-        setContent(text);
-        setKey((k) => k + 1); // Force re-mount to reset Vim state with new content
-      }
-    };
-
-    container.addEventListener("paste", handlePaste);
-    return () => container.removeEventListener("paste", handlePaste);
+  const handlePaste = useCallback((e: React.ClipboardEvent) => {
+    const text = e.clipboardData.getData("text/plain");
+    if (text) {
+      e.preventDefault();
+      setContent(text);
+      setKey((k) => k + 1);
+    }
   }, []);
 
   return (
-    <div ref={containerRef}>
+    <div onPaste={handlePaste}>
       <Vim
         key={key}
         content={content}
