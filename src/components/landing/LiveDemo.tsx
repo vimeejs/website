@@ -4,7 +4,7 @@ import { createHighlighter } from "shiki";
 import "@vimee/shiki-editor/styles.css";
 
 const highlighterPromise = createHighlighter({
-  themes: ["github-dark"],
+  themes: ["catppuccin-mocha"],
   langs: ["typescript"],
 });
 
@@ -31,7 +31,7 @@ export default function LiveDemo() {
       content={defaultContent}
       highlighter={highlighter}
       lang="typescript"
-      theme="github-dark"
+      theme="catppuccin-mocha"
       showLineNumbers={true}
       autoFocus={false}
     />
