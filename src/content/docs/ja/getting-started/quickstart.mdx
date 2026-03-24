@@ -1,0 +1,72 @@
+---
+title: クイックスタート
+description: 数分で最初の vimee インテグレーションを構築する
+sidebar:
+  order: 2
+---
+
+## 純粋関数での基本的な使い方
+
+vimee のコア API は純粋関数を中心に構築されています。バッファとコンテキストを作成し、キーストロークを処理します：
+
+```ts
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
+
+// テキストバッファと初期 Vim コンテキストを作成
+const buffer = new TextBuffer("Hello, World!");
+const ctx = createInitialContext({ line: 0, col: 0 });
+
+// キーストロークを処理 — それぞれ新しいコンテキストとアクションのリストを返す
+const result1 = processKeystroke("l", ctx, buffer);     // 右に移動
+const result2 = processKeystroke("x", result1.newCtx, buffer); // 文字を削除
+```
+
+## React と一緒に
+
+`@vimee/react` でシームレスな React 統合：
+
+```tsx
+import { useVim } from "@vimee/react";
+
+function MyEditor() {
+  const { content, cursor, mode, handleKeyDown } = useVim({
+    content: "Hello, vimee!",
+  });
+
+  return (
+    <div onKeyDown={handleKeyDown} tabIndex={0}>
+      <pre>{content}</pre>
+      <span>Mode: {mode} | Cursor: {cursor.line}:{cursor.col}</span>
+    </div>
+  );
+}
+```
+
+## Shiki Editor と一緒に
+
+構文ハイライト付きのフル機能エディター：
+
+```tsx
+import { use } from "react";
+import { Vim } from "@vimee/shiki-editor";
+import { createHighlighter } from "shiki";
+import "@vimee/shiki-editor/styles.css";
+
+const highlighterPromise = createHighlighter({
+  themes: ["github-dark"],
+  langs: ["typescript"],
+});
+
+function App() {
+  const highlighter = use(highlighterPromise);
+
+  return (
+    <Vim
+      content="console.log('Hello!');"
+      highlighter={highlighter}
+      lang="typescript"
+      theme="github-dark"
+    />
+  );
+}
+```

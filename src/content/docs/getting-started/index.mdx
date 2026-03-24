@@ -1,0 +1,38 @@
+---
+title: Overview
+description: Get started with vimee - the headless Vim engine for the web
+sidebar:
+  order: 0
+---
+
+**vimee** is a headless Vim engine built entirely with pure functions and zero dependencies. It provides a complete Vim editing experience that can be embedded into any web application, regardless of the framework you use.
+
+## Why vimee?
+
+- **Pure Functions** — Every operation is a pure function. Input state in, new state out. No side effects.
+- **Zero Dependencies** — The core engine has no external dependencies, keeping your bundle size minimal.
+- **Framework Agnostic** — Works with React, Vue, Svelte, or any other framework. Bring your own UI.
+- **Testable** — Pure functions are trivially testable. Use `@vimee/testkit` for ergonomic testing.
+
+## Quick Start
+
+```bash
+npm install @vimee/core
+```
+
+```ts
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
+
+const buffer = new TextBuffer("Hello, vimee!");
+const ctx = createInitialContext({ line: 0, col: 0 });
+
+// Process a keystroke — returns new context + actions
+const { newCtx, actions } = processKeystroke("x", ctx, buffer);
+// buffer.getContent() === "ello, vimee!"
+```
+
+## Next Steps
+
+- [Installation](./installation/) — Detailed installation instructions
+- [Quick Start](./quickstart/) — Build your first vimee integration
+- [Packages](../packages/core/) — Explore the available packages

@@ -1,0 +1,72 @@
+---
+title: Quick Start
+description: Build your first vimee integration in minutes
+sidebar:
+  order: 2
+---
+
+## Basic usage with pure functions
+
+vimee's core API is built around pure functions. You create a buffer and context, then process keystrokes:
+
+```ts
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
+
+// Create a text buffer and initial Vim context
+const buffer = new TextBuffer("Hello, World!");
+const ctx = createInitialContext({ line: 0, col: 0 });
+
+// Process keystrokes — each returns a new context and list of actions
+const result1 = processKeystroke("l", ctx, buffer);     // move right
+const result2 = processKeystroke("x", result1.newCtx, buffer); // delete char
+```
+
+## With React
+
+Use `@vimee/react` for seamless React integration:
+
+```tsx
+import { useVim } from "@vimee/react";
+
+function MyEditor() {
+  const { content, cursor, mode, handleKeyDown } = useVim({
+    content: "Hello, vimee!",
+  });
+
+  return (
+    <div onKeyDown={handleKeyDown} tabIndex={0}>
+      <pre>{content}</pre>
+      <span>Mode: {mode} | Cursor: {cursor.line}:{cursor.col}</span>
+    </div>
+  );
+}
+```
+
+## With Shiki Editor
+
+For a full-featured editor with syntax highlighting:
+
+```tsx
+import { use } from "react";
+import { Vim } from "@vimee/shiki-editor";
+import { createHighlighter } from "shiki";
+import "@vimee/shiki-editor/styles.css";
+
+const highlighterPromise = createHighlighter({
+  themes: ["github-dark"],
+  langs: ["typescript"],
+});
+
+function App() {
+  const highlighter = use(highlighterPromise);
+
+  return (
+    <Vim
+      content="console.log('Hello!');"
+      highlighter={highlighter}
+      lang="typescript"
+      theme="github-dark"
+    />
+  );
+}
+```

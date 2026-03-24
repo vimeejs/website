@@ -1,0 +1,124 @@
+---
+title: React インテグレーション
+description: React アプリケーションへの vimee の統合方法
+sidebar:
+  order: 0
+---
+
+このガイドでは、React アプリケーションに vimee をステップバイステップで統合する方法を説明します。
+
+## セットアップ
+
+必要なパッケージをインストール：
+
+```bash
+npm install @vimee/core @vimee/react
+```
+
+## 基本的なエディターコンポーネント
+
+```tsx
+import { useVim } from "@vimee/react";
+
+function VimEditor() {
+  const { content, cursor, mode, handleKeyDown } = useVim({
+    content: "",
+  });
+
+  return (
+    <div
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      style={{
+        fontFamily: "monospace",
+        padding: "1rem",
+        minHeight: "200px",
+        background: "#1a1a2e",
+        color: "#e0e0e0",
+      }}
+    >
+      <pre>{content}</pre>
+    </div>
+  );
+}
+```
+
+## モードの表示
+
+ユーザーがエディターの状態を理解できるよう、現在の Vim モードを表示します：
+
+```tsx
+function StatusBar({ mode }: { mode: string }) {
+  const modeColors: Record<string, string> = {
+    normal: "#7c3aed",
+    insert: "#10b981",
+    visual: "#f59e0b",
+  };
+
+  return (
+    <div style={{ background: modeColors[mode] || "#333", padding: "0.25rem 0.5rem" }}>
+      -- {mode.toUpperCase()} --
+    </div>
+  );
+}
+```
+
+## コールバック付きの完全な例
+
+```tsx
+import { useVim } from "@vimee/react";
+
+function FullEditor() {
+  const { content, cursor, mode, statusMessage, handleKeyDown } = useVim({
+    content: "Hello, vimee!",
+    onChange: (content) => console.log("Content changed:", content),
+    onModeChange: (mode) => console.log("Mode:", mode),
+    onSave: (content) => console.log("Saved:", content),
+  });
+
+  return (
+    <div>
+      <div onKeyDown={handleKeyDown} tabIndex={0} style={{ fontFamily: "monospace" }}>
+        <pre>{content}</pre>
+      </div>
+      <StatusBar mode={mode} />
+      <div>Cursor: {cursor.line}:{cursor.col}</div>
+      {statusMessage && <div>{statusMessage}</div>}
+    </div>
+  );
+}
+```
+
+## Shiki Editor コンポーネントの使用
+
+構文ハイライトには `@vimee/shiki-editor` を使用します：
+
+```bash
+npm install @vimee/core @vimee/react @vimee/shiki-editor shiki
+```
+
+```tsx
+import { use } from "react";
+import { Vim } from "@vimee/shiki-editor";
+import { createHighlighter } from "shiki";
+import "@vimee/shiki-editor/styles.css";
+
+const highlighterPromise = createHighlighter({
+  themes: ["github-dark"],
+  langs: ["typescript"],
+});
+
+function App() {
+  const highlighter = use(highlighterPromise);
+
+  return (
+    <Vim
+      content="const greeting = 'Hello, World!';"
+      highlighter={highlighter}
+      lang="typescript"
+      theme="github-dark"
+      onChange={(content) => console.log(content)}
+    />
+  );
+}
+```

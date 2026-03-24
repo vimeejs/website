@@ -1,0 +1,61 @@
+---
+title: カスタムコマンド
+description: vimee でカスタム Vim コマンドを定義する方法
+sidebar:
+  order: 1
+---
+
+vimee の純粋関数アーキテクチャにより、カスタムコマンドの拡張が容易です。
+
+## カスタムコマンドの定義
+
+すべての操作が純粋関数なので、それらを組み合わせてカスタム動作を作成できます：
+
+```ts
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
+
+function clearLine(ctx: VimContext, buffer: TextBuffer) {
+  // 行頭に移動し、行末まで削除
+  let result = processKeystroke("0", ctx, buffer);
+  result = processKeystroke("d", result.newCtx, buffer);
+  result = processKeystroke("$", result.newCtx, buffer);
+  return result;
+}
+```
+
+## 操作の合成
+
+vimee は純粋関数で構築されているため、操作を自由に合成できます：
+
+```ts
+function duplicateLine(ctx: VimContext, buffer: TextBuffer) {
+  let result = processKeystroke("y", ctx, buffer);
+  result = processKeystroke("y", result.newCtx, buffer); // yy — 行をヤンク
+  result = processKeystroke("p", result.newCtx, buffer); // p — 下にペースト
+  return result;
+}
+```
+
+## testkit で検証する
+
+`@vimee/testkit` を使ってカスタムコマンドが正しく動作するかを検証できます：
+
+```ts
+import { vim } from "@vimee/testkit";
+import { expect, test } from "vitest";
+
+test("clear line removes all content on current line", () => {
+  const v = vim("hello world\nsecond line", { cursor: [0, 3] });
+  v.type("0d$");
+
+  expect(v.line(0)).toBe("");
+  expect(v.line(1)).toBe("second line");
+});
+
+test("yy + p duplicates the current line", () => {
+  const v = vim("hello\nworld");
+  v.type("yyp");
+
+  expect(v.lines()).toEqual(["hello", "hello", "world"]);
+});
+```

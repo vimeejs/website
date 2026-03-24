@@ -1,0 +1,54 @@
+---
+title: "@vimee/plugin-textarea"
+description: Attach Vim keybindings to any HTML textarea
+sidebar:
+  order: 3
+---
+
+A lightweight plugin that attaches Vim keybindings to a standard HTML `<textarea>`. Ideal for simple use cases where syntax highlighting is not needed.
+
+## Installation
+
+```bash
+npm install @vimee/core @vimee/plugin-textarea
+```
+
+## Usage
+
+```ts
+import { attach } from "@vimee/plugin-textarea";
+
+const textarea = document.querySelector("textarea")!;
+
+const vim = attach(textarea, {
+  onChange: (value) => console.log("Content:", value),
+  onModeChange: (mode) => console.log("Mode:", mode),
+});
+
+// Later: clean up
+vim.destroy();
+```
+
+## API
+
+### `attach(textarea, options?)`
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `readOnly` | `boolean` | `false` | Disable editing |
+| `onChange` | `(value: string) => void` | — | Content change callback |
+| `onModeChange` | `(mode: VimMode) => void` | — | Mode change callback |
+| `onYank` | `(text: string) => void` | — | Yank callback |
+| `onSave` | `(value: string) => void` | — | Save callback |
+| `onAction` | `(action: VimAction, key: string) => void` | — | Action callback |
+| `indentStyle` | `"space" \| "tab"` | `"space"` | Indent character |
+| `indentWidth` | `number` | `2` | Indent width |
+
+### Return: VimTextarea
+
+| Method | Return | Description |
+|--------|--------|-------------|
+| `.getMode()` | `VimMode` | Current Vim mode |
+| `.getCursor()` | `CursorPosition` | Cursor position (0-based) |
+| `.getContent()` | `string` | Buffer content |
+| `.destroy()` | `void` | Remove Vim keybindings |

@@ -1,0 +1,91 @@
+---
+title: "@vimee/core"
+description: コア Vim エンジン — 純粋関数、ゼロ依存
+sidebar:
+  order: 0
+---
+
+コアパッケージは、Vim エンジンを純粋関数のコレクションとして提供します。フレームワークバインディングなし、UI なし — エンジンだけ。
+
+## インストール
+
+```bash
+npm install @vimee/core
+```
+
+## 主要な概念
+
+### TextBuffer
+
+コンテンツとアンドゥ履歴を管理するミュータブルなテキストバッファ：
+
+```ts
+import { TextBuffer } from "@vimee/core";
+
+const buffer = new TextBuffer("Hello, World!");
+
+buffer.getContent();    // "Hello, World!"
+buffer.getLine(0);      // "Hello, World!"
+buffer.getLineCount();  // 1
+```
+
+### VimContext
+
+すべての Vim 状態は `VimContext` オブジェクトで表現されます：
+
+```ts
+import { createInitialContext } from "@vimee/core";
+
+const ctx = createInitialContext({ line: 0, col: 0 });
+
+// ctx.mode    — "normal", "insert", "visual", etc.
+// ctx.cursor  — { line: 0, col: 0 }
+// ctx.phase   — "idle", "operator-pending", etc.
+```
+
+### キーストロークの処理
+
+すべてのキーストロークは、新しいコンテキストとアクションのリストを返す純粋関数で処理されます：
+
+```ts
+import { processKeystroke } from "@vimee/core";
+
+const { newCtx, actions } = processKeystroke("i", ctx, buffer);
+// newCtx.mode === "insert"
+// actions === [{ type: "mode-change", mode: "insert" }]
+```
+
+### アクション
+
+アクションは、キーストロークの結果として何が起こったかを記述します：
+
+```ts
+import { actions } from "@vimee/core";
+
+// プログラムでアクションを作成
+actions.cursorMove({ line: 0, col: 5 });
+actions.modeChange("insert");
+actions.contentChange("new content");
+actions.statusMessage("-- INSERT --");
+```
+
+### モーションとオペレーター
+
+vimee は標準的な Vim モーションとオペレーターをサポートします：
+
+```ts
+// モーション: h, j, k, l, w, b, e, 0, $, gg, G, ...
+// オペレーター: d, c, y, >, <
+// 組み合わせ: dw, ci", yy, ...
+const r1 = processKeystroke("d", ctx, buffer);
+const r2 = processKeystroke("w", r1.newCtx, buffer); // 単語を削除
+```
+
+### カスタムキーバインド
+
+```ts
+import { createKeybindMap } from "@vimee/core";
+
+const keybinds = createKeybindMap();
+// processKeystroke の keybinds パラメータと一緒に使用
+```

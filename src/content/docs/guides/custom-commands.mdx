@@ -1,0 +1,61 @@
+---
+title: Custom Commands
+description: How to define custom Vim commands in vimee
+sidebar:
+  order: 1
+---
+
+vimee's pure function architecture makes it easy to extend with custom commands.
+
+## Defining a Custom Command
+
+Since all operations are pure functions, you can compose them to create custom behavior:
+
+```ts
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
+
+function clearLine(ctx: VimContext, buffer: TextBuffer) {
+  // Move to start of line, then delete to end
+  let result = processKeystroke("0", ctx, buffer);
+  result = processKeystroke("d", result.newCtx, buffer);
+  result = processKeystroke("$", result.newCtx, buffer);
+  return result;
+}
+```
+
+## Composing Operations
+
+Because vimee is built on pure functions, you can freely compose operations:
+
+```ts
+function duplicateLine(ctx: VimContext, buffer: TextBuffer) {
+  let result = processKeystroke("y", ctx, buffer);
+  result = processKeystroke("y", result.newCtx, buffer); // yy — yank line
+  result = processKeystroke("p", result.newCtx, buffer); // p — paste below
+  return result;
+}
+```
+
+## Using the Testkit to Verify
+
+You can verify your custom commands work correctly using `@vimee/testkit`:
+
+```ts
+import { vim } from "@vimee/testkit";
+import { expect, test } from "vitest";
+
+test("clear line removes all content on current line", () => {
+  const v = vim("hello world\nsecond line", { cursor: [0, 3] });
+  v.type("0d$");
+
+  expect(v.line(0)).toBe("");
+  expect(v.line(1)).toBe("second line");
+});
+
+test("yy + p duplicates the current line", () => {
+  const v = vim("hello\nworld");
+  v.type("yyp");
+
+  expect(v.lines()).toEqual(["hello", "hello", "world"]);
+});
+```

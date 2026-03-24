@@ -1,0 +1,54 @@
+---
+interface Props {
+  labels: string[];
+}
+
+const { labels } = Astro.props;
+---
+
+<div class="tabs-container my-4" data-tabs>
+  <div class="flex border-b border-border mb-4">
+    {labels.map((label, i) => (
+      <button
+        class:list={[
+          "tab-btn px-4 py-2 text-sm transition-colors border-b-2 -mb-px cursor-pointer",
+          i === 0
+            ? "border-accent text-text font-medium"
+            : "border-transparent text-text-dim hover:text-text",
+        ]}
+        data-tab-index={i}
+      >
+        {label}
+      </button>
+    ))}
+  </div>
+  <div class="tab-panels">
+    <slot />
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll("[data-tabs]").forEach((container) => {
+    const buttons = container.querySelectorAll<HTMLButtonElement>(".tab-btn");
+    const panels = container.querySelectorAll<HTMLElement>(".tab-panels > .tab-panel");
+
+    buttons.forEach((btn, i) => {
+      btn.addEventListener("click", () => {
+        buttons.forEach((b, j) => {
+          b.classList.toggle("border-accent", i === j);
+          b.classList.toggle("text-text", i === j);
+          b.classList.toggle("font-medium", i === j);
+          b.classList.toggle("border-transparent", i !== j);
+          b.classList.toggle("text-text-dim", i !== j);
+        });
+        panels.forEach((p, j) => {
+          p.style.display = i === j ? "block" : "none";
+        });
+      });
+    });
+
+    panels.forEach((p, i) => {
+      p.style.display = i === 0 ? "block" : "none";
+    });
+  });
+</script>

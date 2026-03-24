@@ -1,0 +1,377 @@
+---
+import "../../styles/global.css";
+import LiveDemo from "../../components/landing/LiveDemo";
+
+export function getStaticPaths() {
+  return [{ params: { locale: "en" } }, { params: { locale: "ja" } }];
+}
+
+const { locale } = Astro.params;
+const isJa = locale === "ja";
+
+const t = {
+  title: isJa ? "Web のためのヘッドレス Vim エンジン" : "Headless Vim Engine for the Web",
+  sub: isJa ? "純粋関数。ゼロ依存。あらゆるフレームワーク。" : "Pure functions. Zero dependencies. Any framework.",
+  getStarted: isJa ? "はじめる" : "Get Started",
+  // What is vimee
+  whatIs: isJa ? "vimee とは？" : "What is vimee?",
+  pure: {
+    title: isJa ? "純粋関数" : "Pure Functions",
+    desc: isJa ? "キーストロークと状態を渡すと、新しい状態とアクションが返ってくる" : "Give it a keystroke and state, get back new state and actions",
+  },
+  zero: {
+    title: isJa ? "ゼロ依存" : "Zero Dependencies",
+    desc: isJa ? "純粋な TypeScript。ランタイム依存なし。コアエンジンはわずか 2.8kB gzipped" : "Pure TypeScript. No runtime baggage. The core engine is just 2.8kB gzipped",
+  },
+  any: {
+    title: isJa ? "あらゆるフレームワーク" : "Any Framework",
+    desc: isJa ? "React、Vue、Svelte、バニラ JS。薄いラッパーで動作" : "Works with React, Vue, Svelte, and vanilla JS through thin wrappers",
+  },
+  // Live Demo
+  liveDemo: isJa ? "ライブデモ" : "Live Demo",
+  liveDemoSub: isJa ? "ブラウザで動く本物の Vim エディター" : "A real Vim editor. Right here in the browser.",
+  // Features
+  featuresTitle: isJa ? "機能" : "Features",
+  features: [
+    { icon: "N I V", title: isJa ? "6 つの編集モード" : "Six Editing Modes", desc: isJa ? "Normal、Insert、Visual、Visual-Line、Visual-Block、Command-Line" : "Normal, Insert, Visual, Visual-Line, Visual-Block, Command-Line" },
+    { icon: "hjkl", title: isJa ? "リッチなモーション" : "Rich Motions", desc: isJa ? "w, b, e, 0, $, gg, G, f, t, /, ? など" : "w, b, e, 0, $, gg, G, f, t, /, ? and more" },
+    { icon: "3dd", title: isJa ? "オペレーター & カウント" : "Operators & Counts", desc: isJa ? "d, c, y, >, < をカウントやモーションと組み合わせ" : "d, c, y, >, < combined with counts and motions" },
+    { icon: "iw", title: isJa ? "テキストオブジェクト" : "Text Objects", desc: isJa ? 'iw, aw, i", a(, it など' : 'iw, aw, i", a(, it and more' },
+    { icon: "/", title: isJa ? "検索 & 置換" : "Search & Replace", desc: isJa ? "/pattern, :s/old/new/g" : "/pattern, :s/old/new/g" },
+    { icon: "q@", title: isJa ? "マクロ & マーク" : "Macros & Marks", desc: isJa ? "マクロの記録・再生、名前付きマーク" : "Record, playback, and named marks" },
+  ],
+  // Architecture
+  archTitle: isJa ? "アーキテクチャ" : "Architecture",
+  archDesc: isJa ? "すべてが純粋関数。DOM アクセスなし。副作用なし。" : "Everything is a pure function. No DOM access. No side effects.",
+  // Packages
+  packagesTitle: isJa ? "パッケージ" : "Packages",
+  // Community
+  communityTitle: isJa ? "コミュニティ" : "Community",
+  communityDesc: isJa ? "オープンソースで構築。MIT ライセンス。" : "Built in the open. MIT licensed.",
+};
+
+const packages = [
+  { name: "@vimee/core", desc: isJa ? "ヘッドレスエンジン" : "Headless engine", href: `/${locale}/packages/core/` },
+  { name: "@vimee/react", desc: isJa ? "React フック" : "React hooks", href: `/${locale}/packages/react/` },
+  { name: "@vimee/shiki-editor", desc: isJa ? "ドロップイン エディター" : "Drop-in editor", href: `/${locale}/packages/shiki-editor/` },
+  { name: "@vimee/plugin-textarea", desc: "Textarea", href: `/${locale}/packages/plugin-textarea/` },
+  { name: "@vimee/plugin-monaco", desc: "Monaco", href: `/${locale}/packages/plugin-monaco/` },
+  { name: "@vimee/plugin-codemirror", desc: "CodeMirror", href: `/${locale}/packages/plugin-codemirror/` },
+  { name: "@vimee/testkit", desc: isJa ? "テストキット" : "Test kit", href: `/${locale}/packages/testkit/` },
+];
+---
+
+<html lang={locale} class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>vimee — {t.title}</title>
+    <meta name="description" content={t.sub} />
+    <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="lp">
+
+    <!-- ═══ 1. HERO ═══ -->
+    <section class="hero">
+      <div id="shader-canvas" class="shader-bg"></div>
+      <div class="hero-fade"></div>
+
+      <nav class="hero-nav">
+        <a href={`/${locale}/`} class="nav-logo">
+          <img src="https://assets.vimee.dev/brandresource/vimee.svg" alt="" width="24" height="24" />
+          <span>vimee</span>
+        </a>
+        <div class="nav-links">
+          <a href={`/${locale}/getting-started/`}>Docs</a>
+          <a href="https://github.com/vimeejs/vimee">GitHub</a>
+          <a href={locale === "en" ? "/ja/" : "/en/"} class="nav-lang">
+            {locale === "en" ? "日本語" : "English"}
+          </a>
+        </div>
+      </nav>
+
+      <div class="hero-content">
+        <img src="https://assets.vimee.dev/brandresource/vimee.svg" alt="vimee" class="hero-mascot" width="80" height="80" />
+        <h1 class="hero-title">vimee</h1>
+        <p class="hero-tagline">{t.title}</p>
+        <p class="hero-sub">{t.sub}</p>
+        <div class="hero-cta">
+          <a href={`/${locale}/getting-started/`} class="btn-primary">
+            {t.getStarted}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="https://github.com/vimeejs/vimee" class="btn-ghost">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══ 2. WHAT IS VIMEE ═══ -->
+    <section class="what-is" data-reveal>
+      <h2>{t.whatIs}</h2>
+      <div class="what-grid">
+        <div class="what-card">
+          <h3>{t.pure.title}</h3>
+          <p>{t.pure.desc}</p>
+        </div>
+        <div class="what-card">
+          <h3>{t.zero.title}</h3>
+          <p>{t.zero.desc}</p>
+        </div>
+        <div class="what-card">
+          <h3>{t.any.title}</h3>
+          <p>{t.any.desc}</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══ 3. LIVE DEMO ═══ -->
+    <section class="demo-section" data-reveal>
+      <h2>{t.liveDemo}</h2>
+      <p class="section-sub">{t.liveDemoSub}</p>
+      <div class="demo-container">
+        <LiveDemo client:only="react" />
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══ 4. FEATURES ═══ -->
+    <section class="features-section" data-reveal>
+      <h2>{t.featuresTitle}</h2>
+      <div class="features-grid">
+        {t.features.map((f) => (
+          <div class="feature-card">
+            <span class="feature-icon">{f.icon}</span>
+            <h3>{f.title}</h3>
+            <p>{f.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══ 5. ARCHITECTURE ═══ -->
+    <section class="arch-section" data-reveal>
+      <h2>{t.archTitle}</h2>
+      <p class="section-sub">{t.archDesc}</p>
+      <div class="arch-flow">
+        <div class="arch-box arch-input">
+          <span class="arch-label">Input</span>
+          <code>keystroke + state</code>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box arch-processor">
+          <span class="arch-label">Processor</span>
+          <code>processKeystroke()</code>
+        </div>
+        <div class="arch-arrow">→</div>
+        <div class="arch-box arch-output">
+          <span class="arch-label">Output</span>
+          <code>newState + VimAction[]</code>
+        </div>
+      </div>
+      <div class="arch-actions">
+        <span>cursor-move</span>
+        <span>content-change</span>
+        <span>mode-change</span>
+        <span>yank</span>
+        <span>save</span>
+        <span>status-message</span>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══ 6. PACKAGES ═══ -->
+    <section class="packages-section" data-reveal>
+      <h2>{t.packagesTitle}</h2>
+      <div class="pkg-grid">
+        {packages.map((pkg) => (
+          <a href={pkg.href} class="pkg-card">
+            <code>{pkg.name}</code>
+            <span>{pkg.desc}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- ═══ 7. COMMUNITY ═══ -->
+    <section class="community-section" data-reveal>
+      <h2>{t.communityTitle}</h2>
+      <p class="section-sub">{t.communityDesc}</p>
+      <div class="community-links">
+        <a href="https://github.com/vimeejs/vimee" class="community-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+        <a href="https://playground.vimee.dev" class="community-link">
+          <span>▶</span> Playground
+        </a>
+        <a href="https://www.npmjs.com/package/@vimee/core" class="community-link">
+          <span>📦</span> npm
+        </a>
+      </div>
+    </section>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script>
+      import { initPhantomShader } from "../../components/landing/PhantomShader";
+      const container = document.getElementById("shader-canvas");
+      if (container) {
+        const cleanup = initPhantomShader(container);
+        document.addEventListener("astro:before-swap", cleanup, { once: true });
+      }
+    </script>
+
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("revealed");
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+      document.querySelectorAll("[data-reveal]").forEach((el) => observer.observe(el));
+    </script>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&display=swap");
+
+      :root {
+        --bg: var(--color-bg-primary);
+        --surface: var(--color-bg-surface);
+        --border: var(--color-border);
+        --text: var(--color-text);
+        --text-dim: var(--color-text-dim);
+        --accent: var(--color-accent);
+        --accent-glow: hsla(280, 82%, 63%, 0.15);
+        --mono: "Geist Mono", var(--font-mono);
+        --sans: var(--font-sans);
+      }
+
+      html { background: var(--bg); }
+      body.lp {
+        font-family: var(--sans);
+        color: var(--text);
+        background: var(--bg);
+        line-height: 1.6;
+        overflow-x: hidden;
+      }
+      a { color: inherit; text-decoration: none; }
+
+      .section-divider {
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--border), transparent);
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      /* Reveal animation */
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+      [data-reveal].revealed {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ══ HERO ══ */
+      .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+      .shader-bg { position: absolute; inset: 0; z-index: 0; }
+      .hero-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(to top, var(--bg), transparent); z-index: 1; }
+
+      .hero-nav { position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2rem; }
+      .nav-logo { display: flex; align-items: center; gap: 0.5rem; font-family: var(--mono); font-weight: 600; font-size: 1rem; }
+      .nav-links { display: flex; align-items: center; gap: 1.5rem; font-size: 0.95rem; color: var(--text-dim); }
+      .nav-links a:hover { color: var(--text); }
+      .nav-lang { padding: 0.25rem 0.6rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem; }
+
+      .hero-content { position: relative; z-index: 10; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 2rem 6rem; }
+      .hero-mascot { width: 80px; height: 80px; margin-bottom: 1.5rem; filter: drop-shadow(0 0 20px hsla(280, 82%, 63%, 0.2)); }
+      .hero-title { font-family: var(--mono); font-size: clamp(3.5rem, 10vw, 7rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin-bottom: 0.75rem; background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+      .hero-tagline { font-family: var(--mono); font-size: clamp(1.1rem, 2.5vw, 1.5rem); color: var(--text-dim); margin-bottom: 0.5rem; }
+      .hero-sub { font-size: 1rem; color: var(--text-dim); opacity: 0.6; margin-bottom: 2.5rem; }
+      .hero-cta { display: flex; gap: 0.75rem; align-items: center; }
+      .btn-primary { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.7rem 1.6rem; background: var(--accent); color: #fff; font-weight: 600; font-size: 1rem; border-radius: 8px; transition: all 0.2s; }
+      .btn-primary:hover { filter: brightness(1.15); transform: translateY(-1px); box-shadow: 0 4px 24px var(--accent-glow); }
+      .btn-ghost { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; border: 1px solid var(--border); color: var(--text-dim); font-weight: 500; font-size: 1rem; border-radius: 8px; transition: all 0.2s; }
+      .btn-ghost:hover { border-color: rgba(255,255,255,0.15); color: var(--text); background: rgba(255,255,255,0.03); }
+
+      /* ══ WHAT IS ══ */
+      .what-is { padding: 5rem 2rem; max-width: 960px; margin: 0 auto; text-align: center; }
+      .what-is h2 { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; margin-bottom: 2rem; }
+      .what-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+      @media (max-width: 768px) { .what-grid { grid-template-columns: 1fr; } }
+      .what-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; text-align: left; }
+      .what-card h3 { font-family: var(--mono); font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--accent); }
+      .what-card p { font-size: 0.95rem; color: var(--text-dim); line-height: 1.5; }
+
+      /* ══ DEMO ══ */
+      .demo-section { padding: 5rem 2rem; max-width: 900px; margin: 0 auto; }
+      .demo-section h2 { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; text-align: center; margin-bottom: 0.5rem; }
+      .section-sub { text-align: center; color: var(--text-dim); font-size: 1rem; margin-bottom: 2rem; }
+      .demo-container { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+
+      /* ══ FEATURES ══ */
+      .features-section { padding: 5rem 2rem; max-width: 960px; margin: 0 auto; }
+      .features-section h2 { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; text-align: center; margin-bottom: 2rem; }
+      .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+      @media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } }
+      .feature-card { background: var(--surface); padding: 1.75rem; }
+      .feature-card:hover { background: rgba(255,255,255,0.02); }
+      .feature-icon { font-family: var(--mono); font-size: 1rem; color: var(--accent); display: block; margin-bottom: 0.75rem; letter-spacing: 0.05em; }
+      .feature-card h3 { font-family: var(--mono); font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+      .feature-card p { font-size: 0.9rem; color: var(--text-dim); line-height: 1.5; }
+
+      /* ══ ARCHITECTURE ══ */
+      .arch-section { padding: 5rem 2rem; max-width: 800px; margin: 0 auto; text-align: center; }
+      .arch-section h2 { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+      .arch-flow { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 2.5rem 0 1.5rem; flex-wrap: wrap; }
+      .arch-box { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; text-align: center; min-width: 160px; }
+      .arch-label { display: block; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 0.5rem; }
+      .arch-box code { font-family: var(--mono); font-size: 0.85rem; color: var(--accent); }
+      .arch-arrow { font-size: 1.5rem; color: var(--text-dim); }
+      .arch-processor { border-color: var(--accent); }
+      .arch-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+      .arch-actions span { font-family: var(--mono); font-size: 0.75rem; padding: 0.3rem 0.75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 6px; color: var(--text-dim); }
+
+      /* ══ PACKAGES ══ */
+      .packages-section { padding: 5rem 2rem; max-width: 800px; margin: 0 auto; }
+      .packages-section h2 { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; text-align: center; margin-bottom: 2rem; }
+      .pkg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; }
+      .pkg-card { display: flex; flex-direction: column; gap: 0.25rem; padding: 1.25rem; border: 1px solid var(--border); border-radius: 8px; transition: all 0.2s; }
+      .pkg-card:hover { border-color: var(--accent); background: var(--accent-glow); }
+      .pkg-card code { font-family: var(--mono); font-size: 0.9rem; color: var(--accent); }
+      .pkg-card span { font-size: 0.85rem; color: var(--text-dim); }
+
+      /* ══ COMMUNITY ══ */
+      .community-section { padding: 5rem 2rem 3rem; max-width: 600px; margin: 0 auto; text-align: center; }
+      .community-mascot { margin-bottom: 1rem; opacity: 0.8; }
+      .community-section h2 { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+      .community-links { display: flex; justify-content: center; gap: 1rem; margin: 2rem 0; flex-wrap: wrap; }
+      .community-link { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; color: var(--text-dim); transition: all 0.2s; }
+      .community-link:hover { border-color: rgba(255,255,255,0.15); color: var(--text); }
+      .footer-copy { font-size: 0.75rem; color: var(--text-dim); opacity: 0.4; font-family: var(--mono); margin-top: 2rem; }
+    </style>
+  </body>
+</html>

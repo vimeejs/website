@@ -1,0 +1,91 @@
+---
+title: Testing
+description: How to test vimee integrations
+sidebar:
+  order: 2
+---
+
+Since vimee is built on pure functions, testing is straightforward — no mocks, no DOM, just input and output.
+
+## Using @vimee/testkit
+
+```bash
+npm install -D @vimee/testkit
+```
+
+```ts
+import { vim } from "@vimee/testkit";
+import { expect, test } from "vitest";
+
+test("x deletes character under cursor", () => {
+  const v = vim("hello", { cursor: [0, 0] });
+  v.type("x");
+
+  expect(v.content()).toBe("ello");
+  expect(v.cursor()).toEqual({ line: 0, col: 0 });
+});
+```
+
+## Testing Without testkit
+
+You can also test with plain assertions using the core API:
+
+```ts
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
+import { expect, test } from "vitest";
+
+test("enter insert mode with i", () => {
+  const buffer = new TextBuffer("hello");
+  const ctx = createInitialContext({ line: 0, col: 0 });
+  const { newCtx } = processKeystroke("i", ctx, buffer);
+  expect(newCtx.mode).toBe("insert");
+});
+```
+
+## Common Test Patterns
+
+### Testing motions
+
+```ts
+test("w moves to next word", () => {
+  const v = vim("hello world");
+  v.type("w");
+
+  expect(v.cursor()).toEqual({ line: 0, col: 6 });
+});
+```
+
+### Testing operators
+
+```ts
+test("dw deletes a word", () => {
+  const v = vim("hello world");
+  v.type("dw");
+
+  expect(v.content()).toBe("world");
+});
+```
+
+### Testing mode changes
+
+```ts
+test("i enters insert mode, Esc returns to normal", () => {
+  const v = vim("hello");
+  v.type("i");
+  expect(v.mode()).toBe("insert");
+
+  v.type("<Esc>");
+  expect(v.mode()).toBe("normal");
+});
+```
+
+### Chaining keystrokes
+
+```ts
+test("ci\" changes inside quotes", () => {
+  const v = vim('say "hello" please', { cursor: [0, 5] });
+  v.type('ci"new text<Esc>');
+
+  expect(v.content()).toBe('say "new text" please');
+});
+```

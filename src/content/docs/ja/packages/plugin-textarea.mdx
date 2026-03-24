@@ -1,0 +1,54 @@
+---
+title: "@vimee/plugin-textarea"
+description: 任意の HTML textarea に Vim キーバインドを付与
+sidebar:
+  order: 3
+---
+
+標準的な HTML `<textarea>` に Vim キーバインドを付与する軽量プラグイン。構文ハイライトが不要なシンプルなユースケースに最適です。
+
+## インストール
+
+```bash
+npm install @vimee/core @vimee/plugin-textarea
+```
+
+## 使い方
+
+```ts
+import { attach } from "@vimee/plugin-textarea";
+
+const textarea = document.querySelector("textarea")!;
+
+const vim = attach(textarea, {
+  onChange: (value) => console.log("Content:", value),
+  onModeChange: (mode) => console.log("Mode:", mode),
+});
+
+// 後でクリーンアップ
+vim.destroy();
+```
+
+## API
+
+### `attach(textarea, options?)`
+
+| オプション | 型 | デフォルト | 説明 |
+|--------|------|---------|-------------|
+| `readOnly` | `boolean` | `false` | 編集を無効にする |
+| `onChange` | `(value: string) => void` | — | コンテンツ変更コールバック |
+| `onModeChange` | `(mode: VimMode) => void` | — | モード変更コールバック |
+| `onYank` | `(text: string) => void` | — | ヤンクコールバック |
+| `onSave` | `(value: string) => void` | — | 保存コールバック |
+| `onAction` | `(action: VimAction, key: string) => void` | — | アクションコールバック |
+| `indentStyle` | `"space" \| "tab"` | `"space"` | インデント文字 |
+| `indentWidth` | `number` | `2` | インデント幅 |
+
+### 戻り値: VimTextarea
+
+| メソッド | 戻り値 | 説明 |
+|--------|--------|-------------|
+| `.getMode()` | `VimMode` | 現在の Vim モード |
+| `.getCursor()` | `CursorPosition` | カーソル位置（0ベース） |
+| `.getContent()` | `string` | バッファコンテンツ |
+| `.destroy()` | `void` | Vim キーバインドを削除 |

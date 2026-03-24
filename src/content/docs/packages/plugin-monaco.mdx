@@ -1,0 +1,53 @@
+---
+title: "@vimee/plugin-monaco"
+description: Vim keybindings for Monaco Editor
+sidebar:
+  order: 4
+---
+
+Integrate vimee's Vim engine with [Monaco Editor](https://microsoft.github.io/monaco-editor/) — the editor that powers VS Code.
+
+## Installation
+
+```bash
+npm install @vimee/core @vimee/plugin-monaco
+```
+
+## Usage
+
+```ts
+import * as monaco from "monaco-editor";
+import { attach } from "@vimee/plugin-monaco";
+
+const editor = monaco.editor.create(document.getElementById("editor")!, {
+  value: "console.log('hello');",
+  language: "typescript",
+});
+
+const vim = attach(editor, {
+  onChange: (value) => console.log("Content:", value),
+  onModeChange: (mode) => console.log("Mode:", mode),
+});
+
+// Later: clean up
+vim.destroy();
+```
+
+## API
+
+### `attach(editor, options?)`
+
+Same options as `@vimee/plugin-textarea`. Returns `VimMonaco` with the same interface: `.getMode()`, `.getCursor()`, `.getContent()`, `.destroy()`.
+
+### Cursor Utilities
+
+```ts
+import { cursorToMonacoPosition, monacoPositionToCursor } from "@vimee/plugin-monaco";
+
+// vimee uses 0-based positions, Monaco uses 1-based
+const monacoPos = cursorToMonacoPosition({ line: 0, col: 5 });
+// { lineNumber: 1, column: 6 }
+
+const vimeePos = monacoPositionToCursor({ lineNumber: 1, column: 6 });
+// { line: 0, col: 5 }
+```

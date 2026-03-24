@@ -1,0 +1,127 @@
+---
+title: インストール
+description: vimee パッケージのインストール方法
+sidebar:
+  order: 1
+---
+
+## コアパッケージのインストール
+
+import Tabs from "../../../../components/docs/Tabs.astro";
+
+<Tabs labels={["npm", "yarn", "pnpm", "bun"]}>
+  <div class="tab-panel">
+    ```bash
+    npm install @vimee/core
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    yarn add @vimee/core
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    pnpm add @vimee/core
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    bun add @vimee/core
+    ```
+  </div>
+</Tabs>
+
+## React と一緒に
+
+React を使用している場合は、React バインディングもインストールしてください：
+
+<Tabs labels={["npm", "yarn", "pnpm", "bun"]}>
+  <div class="tab-panel">
+    ```bash
+    npm install @vimee/core @vimee/react
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    yarn add @vimee/core @vimee/react
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    pnpm add @vimee/core @vimee/react
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    bun add @vimee/core @vimee/react
+    ```
+  </div>
+</Tabs>
+
+## React コンポーネントと一緒に
+
+Shiki による構文ハイライト付きのフル機能エディター：
+
+<Tabs labels={["npm", "yarn", "pnpm", "bun"]}>
+  <div class="tab-panel">
+    ```bash
+    npm install @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    yarn add @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    pnpm add @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    bun add @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+</Tabs>
+
+## エディタープラグインと一緒に
+
+vimee はさまざまなユースケースに対応するエディタープラグインを提供しています：
+
+| パッケージ | 説明 |
+|---------|-------------|
+| `@vimee/plugin-textarea` | 任意の HTML textarea に Vim キーバインドを付与 |
+| `@vimee/plugin-monaco` | Monaco Editor 統合 |
+| `@vimee/plugin-codemirror` | CodeMirror 6 統合 |
+
+ニーズに合ったものをインストールしてください：
+
+<Tabs labels={["npm", "yarn", "pnpm", "bun"]}>
+  <div class="tab-panel">
+    ```bash
+    npm install @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    yarn add @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    pnpm add @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    bun add @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+</Tabs>
+
+## 要件
+
+- Node.js 18+
+- TypeScript 5.0+（推奨）

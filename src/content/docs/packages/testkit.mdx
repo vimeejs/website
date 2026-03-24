@@ -1,0 +1,82 @@
+---
+title: "@vimee/testkit"
+description: Testing utilities for vimee
+sidebar:
+  order: 6
+---
+
+Ergonomic testing utilities for vimee. Write Vim operation tests with a natural, chainable syntax.
+
+## Installation
+
+```bash
+npm install -D @vimee/testkit
+```
+
+## Usage
+
+```ts
+import { vim } from "@vimee/testkit";
+import { expect, test } from "vitest";
+
+test("dd deletes the current line", () => {
+  const v = vim("line 1\nline 2\nline 3", { cursor: [1, 0] });
+  v.type("dd");
+
+  expect(v.content()).toBe("line 1\nline 3");
+  expect(v.cursor()).toEqual({ line: 1, col: 0 });
+});
+```
+
+## API
+
+### `vim(text, options?)`
+
+Creates a test harness:
+
+```ts
+const v = vim("Hello, World!", {
+  cursor: [0, 5],      // [line, col] 0-based
+  mode: "normal",       // starting mode
+  indentStyle: "space", // "space" | "tab"
+  indentWidth: 2,
+});
+```
+
+### VimHarness methods
+
+| Method | Return | Description |
+|--------|--------|-------------|
+| `.type(keys)` | `VimHarness` | Send key sequence (chainable) |
+| `.content()` | `string` | Get buffer content |
+| `.cursor()` | `CursorPosition` | Get cursor position (0-based) |
+| `.mode()` | `VimMode` | Get current Vim mode |
+| `.lines()` | `string[]` | Get all lines |
+| `.line(index)` | `string` | Get line at index (0-based) |
+| `.register(name)` | `string` | Get register content |
+| `.actions()` | `VimAction[]` | Actions from last `.type()` |
+| `.allActions()` | `VimAction[]` | All actions since creation |
+| `.statusMessage()` | `string` | Get status bar message |
+| `.raw()` | `{ ctx, buffer }` | Access raw VimContext and TextBuffer |
+
+### Key notation
+
+```ts
+v.type("dd");           // delete line
+v.type("<Esc>");        // Escape
+v.type("<C-d>");        // Ctrl+D
+v.type("<CR>");         // Enter
+v.type("ciw");          // change inner word
+v.type("dw");           // delete word
+```
+
+### Chaining
+
+```ts
+vim("hello world")
+  .type("w")        // move to "world"
+  .type("dw");      // delete "world"
+
+// Verify
+expect(vim("hello world").type("wdw").content()).toBe("hello ");
+```

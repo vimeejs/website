@@ -1,0 +1,85 @@
+---
+title: "@vimee/shiki-editor"
+description: Shiki による構文ハイライト付き Vim エディター
+sidebar:
+  order: 2
+---
+
+[Shiki](https://shiki.style/) による構文ハイライト付きのフル機能 Vim エディターコンポーネント。
+
+## インストール
+
+```bash
+npm install @vimee/core @vimee/react @vimee/shiki-editor shiki
+```
+
+## 使い方
+
+```tsx
+import { use } from "react";
+import { Vim } from "@vimee/shiki-editor";
+import { createHighlighter } from "shiki";
+import "@vimee/shiki-editor/styles.css";
+
+const highlighterPromise = createHighlighter({
+  themes: ["github-dark"],
+  langs: ["typescript"],
+});
+
+function App() {
+  const highlighter = use(highlighterPromise);
+
+  return (
+    <Vim
+      content="const hello = 'world';"
+      highlighter={highlighter}
+      lang="typescript"
+      theme="github-dark"
+      onChange={(content) => console.log(content)}
+    />
+  );
+}
+```
+
+## Props
+
+| Prop | 型 | デフォルト | 説明 |
+|------|------|---------|-------------|
+| `content` | `string` | （必須） | エディターコンテンツ |
+| `highlighter` | `HighlighterGeneric` | （必須） | Shiki ハイライターインスタンス |
+| `lang` | `string` | （必須） | 言語識別子 |
+| `theme` | `string` | （必須） | Shiki テーマ名 |
+| `shikiOptions` | `Record<string, unknown>` | — | 追加の Shiki オプション |
+| `cursorPosition` | `string` | `"1:1"` | 初期カーソル位置（1ベース） |
+| `onChange` | `(content: string) => void` | — | コンテンツ変更コールバック |
+| `onYank` | `(text: string) => void` | — | ヤンクコールバック |
+| `onSave` | `(content: string) => void` | — | 保存コールバック |
+| `onModeChange` | `(mode: VimMode) => void` | — | モード変更コールバック |
+| `onAction` | `(action: VimAction, key: string) => void` | — | アクションコールバック |
+| `className` | `string` | — | コンテナ CSS クラス |
+| `readOnly` | `boolean` | `false` | 編集を無効にする |
+| `autoFocus` | `boolean` | `false` | マウント時に自動フォーカス |
+| `indentStyle` | `"space" \| "tab"` | `"space"` | インデント文字 |
+| `indentWidth` | `number` | `2` | インデント幅 |
+| `showLineNumbers` | `boolean` | `true` | 行番号を表示 |
+
+## サブコンポーネント
+
+このパッケージは、カスタムレイアウト用の個別サブコンポーネントもエクスポートしています：
+
+- `<Cursor />` — エディターカーソルをレンダリング
+- `<Line />` — ハイライトされた1行をレンダリング
+- `<StatusLine />` — Vim ステータスバーをレンダリング
+
+## フック
+
+- `useShikiTokens(highlighter, content, lang, theme, extraOptions?)` — Shiki でコンテンツをトークナイズ
+- `computeSelectionInfo(cursor, visualAnchor, buffer)` — ビジュアル選択範囲を計算
+
+## CSS
+
+ベーススタイルをインポート：
+
+```ts
+import "@vimee/shiki-editor/styles.css";
+```

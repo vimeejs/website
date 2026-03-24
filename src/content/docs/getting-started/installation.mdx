@@ -1,0 +1,127 @@
+---
+title: Installation
+description: How to install vimee packages
+sidebar:
+  order: 1
+---
+
+## Install the core package
+
+import Tabs from "../../../components/docs/Tabs.astro";
+
+<Tabs labels={["npm", "yarn", "pnpm", "bun"]}>
+  <div class="tab-panel">
+    ```bash
+    npm install @vimee/core
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    yarn add @vimee/core
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    pnpm add @vimee/core
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    bun add @vimee/core
+    ```
+  </div>
+</Tabs>
+
+## With React
+
+If you're using React, install the React bindings as well:
+
+<Tabs labels={["npm", "yarn", "pnpm", "bun"]}>
+  <div class="tab-panel">
+    ```bash
+    npm install @vimee/core @vimee/react
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    yarn add @vimee/core @vimee/react
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    pnpm add @vimee/core @vimee/react
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    bun add @vimee/core @vimee/react
+    ```
+  </div>
+</Tabs>
+
+## With React Component
+
+For a full-featured editor with syntax highlighting powered by Shiki:
+
+<Tabs labels={["npm", "yarn", "pnpm", "bun"]}>
+  <div class="tab-panel">
+    ```bash
+    npm install @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    yarn add @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    pnpm add @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    bun add @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+</Tabs>
+
+## With an editor plugin
+
+vimee provides several editor plugins for different use cases:
+
+| Package | Description |
+|---------|-------------|
+| `@vimee/plugin-textarea` | Attach Vim keybindings to any HTML textarea |
+| `@vimee/plugin-monaco` | Monaco Editor integration |
+| `@vimee/plugin-codemirror` | CodeMirror 6 integration |
+
+Install the one that fits your needs:
+
+<Tabs labels={["npm", "yarn", "pnpm", "bun"]}>
+  <div class="tab-panel">
+    ```bash
+    npm install @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    yarn add @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    pnpm add @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    bun add @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+</Tabs>
+
+## Requirements
+
+- Node.js 18+
+- TypeScript 5.0+ (recommended)

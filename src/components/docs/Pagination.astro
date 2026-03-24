@@ -1,0 +1,28 @@
+---
+import { getCollection } from "astro:content";
+import { getFlatDocOrder } from "../../lib/sidebar";
+import type { Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+  currentPath: string;
+}
+
+const { locale, currentPath } = Astro.props;
+const allDocs = await getCollection("docs");
+const flatOrder = getFlatDocOrder(allDocs, locale);
+
+const normalizedPath = currentPath.endsWith("/") ? currentPath : currentPath + "/";
+const currentIndex = flatOrder.findIndex((item) => item.href === normalizedPath);
+const prev = currentIndex > 0 ? flatOrder[currentIndex - 1] : null;
+const next = currentIndex < flatOrder.length - 1 ? flatOrder[currentIndex + 1] : null;
+---
+
+<nav class="flex justify-between items-center">
+  {prev ? (
+    <a href={prev.href} class="text-sm text-text-dim hover:text-text transition-colors">← {prev.title}</a>
+  ) : <div />}
+  {next ? (
+    <a href={next.href} class="text-sm text-accent hover:text-accent-bright transition-colors text-right">{next.title} →</a>
+  ) : <div />}
+</nav>

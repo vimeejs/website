@@ -1,0 +1,58 @@
+---
+import Header from "../components/docs/Header.astro";
+import Sidebar from "../components/docs/Sidebar.astro";
+import TableOfContents from "../components/docs/TableOfContents.astro";
+import Pagination from "../components/docs/Pagination.astro";
+import EditLink from "../components/docs/EditLink.astro";
+import Search from "../components/docs/Search.astro";
+import ThemeToggle from "../components/docs/ThemeToggle.astro";
+import type { Locale } from "../lib/i18n";
+import type { MarkdownHeading } from "astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  headings: MarkdownHeading[];
+  locale: Locale;
+  currentPath: string;
+  editUrl: boolean;
+  entryId: string;
+}
+
+const { title, description, headings, locale, currentPath, editUrl, entryId } = Astro.props;
+---
+
+<html lang={locale} class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title} | vimee</title>
+    <meta name="description" content={description} />
+    <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body class="bg-bg-primary text-text font-sans antialiased">
+    <Header locale={locale} currentPath={currentPath} />
+    <Search />
+    <div class="flex max-w-[1400px] mx-auto">
+      <Sidebar locale={locale} currentPath={currentPath} />
+      <main class="flex-1 min-w-0 px-6 lg:px-12 py-8 max-w-[720px]">
+        <h1 class="text-3xl font-bold mb-2">{title}</h1>
+        <p class="text-text-dim mb-8">{description}</p>
+        <article class="prose dark:prose-invert max-w-none">
+          <slot />
+        </article>
+        <div class="mt-12 pt-6 border-t border-border">
+          <Pagination locale={locale} currentPath={currentPath} />
+        </div>
+      </main>
+      <aside class="hidden xl:block w-[200px] shrink-0 py-8 pr-6">
+        <TableOfContents headings={headings} />
+        {editUrl && <EditLink entryId={entryId} />}
+      </aside>
+    </div>
+    <ThemeToggle />
+  </body>
+</html>

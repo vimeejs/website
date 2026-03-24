@@ -1,0 +1,67 @@
+---
+title: "@vimee/react"
+description: vimee の React フックとバインディング
+sidebar:
+  order: 1
+---
+
+vimee の React バインディング。シームレスな統合のための `useVim` フックを提供します。
+
+## インストール
+
+```bash
+npm install @vimee/core @vimee/react
+```
+
+## useVim
+
+React コンポーネントに vimee を統合するための主要フック：
+
+```tsx
+import { useVim } from "@vimee/react";
+
+function Editor() {
+  const { content, cursor, mode, handleKeyDown } = useVim({
+    content: "Hello, vimee!",
+  });
+
+  return (
+    <div onKeyDown={handleKeyDown} tabIndex={0}>
+      <pre>{content}</pre>
+      <div>Mode: {mode} | Cursor: {cursor.line}:{cursor.col}</div>
+    </div>
+  );
+}
+```
+
+## オプション
+
+| オプション | 型 | デフォルト | 説明 |
+|--------|------|---------|-------------|
+| `content` | `string` | （必須） | 初期エディターコンテンツ |
+| `cursorPosition` | `string` | `"1:1"` | 初期カーソル位置（1ベース、`"line:col"`） |
+| `readOnly` | `boolean` | `false` | 編集を無効にする |
+| `onChange` | `(content: string) => void` | — | コンテンツ変更時に呼ばれる |
+| `onYank` | `(text: string) => void` | — | ヤンク時に呼ばれる |
+| `onSave` | `(content: string) => void` | — | `:w` 時に呼ばれる |
+| `onModeChange` | `(mode: VimMode) => void` | — | モード変更時に呼ばれる |
+| `onAction` | `(action: VimAction, key: string) => void` | — | すべてのアクションで呼ばれる |
+| `indentStyle` | `"space" \| "tab"` | `"space"` | インデント文字 |
+| `indentWidth` | `number` | `2` | インデント幅 |
+| `keybinds` | `KeybindEntry[]` | — | カスタムキーバインド |
+| `commands` | `CommandEntry[]` | — | カスタム ex コマンド |
+
+## 戻り値
+
+| フィールド | 型 | 説明 |
+|-------|------|-------------|
+| `content` | `string` | 現在のバッファコンテンツ |
+| `cursor` | `CursorPosition` | 現在のカーソル位置（0ベース） |
+| `mode` | `VimMode` | 現在の Vim モード |
+| `statusMessage` | `string` | ステータスバーメッセージ |
+| `statusError` | `boolean` | ステータスがエラーかどうか |
+| `visualAnchor` | `CursorPosition \| null` | ビジュアルモードのアンカー |
+| `commandLine` | `string` | 入力中の Ex コマンド |
+| `handleKeyDown` | `(e: React.KeyboardEvent) => void` | `onKeyDown` にアタッチ |
+| `handleScroll` | `(direction, visibleLines, amount?) => void` | スクロールハンドラー |
+| `updateViewport` | `(topLine, height) => void` | ビューポート同期 |

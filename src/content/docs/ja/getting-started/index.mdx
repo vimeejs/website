@@ -1,0 +1,38 @@
+---
+title: 概要
+description: vimee を使い始める — Web 向けヘッドレス Vim エンジン
+sidebar:
+  order: 0
+---
+
+**vimee** は、純粋関数とゼロ依存で構築されたヘッドレス Vim エンジンです。フレームワークを問わず、あらゆる Web アプリケーションに完全な Vim 編集体験を組み込むことができます。
+
+## なぜ vimee？
+
+- **純粋関数** — すべての操作が純粋関数。状態を入力し、新しい状態を出力。副作用なし。
+- **ゼロ依存** — コアエンジンに外部依存はなく、バンドルサイズを最小限に保ちます。
+- **フレームワーク非依存** — React、Vue、Svelte、その他あらゆるフレームワークで動作します。UIは自由に構築できます。
+- **テスタブル** — 純粋関数は簡単にテストできます。`@vimee/testkit` でエルゴノミックなテストが可能です。
+
+## クイックスタート
+
+```bash
+npm install @vimee/core
+```
+
+```ts
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
+
+const buffer = new TextBuffer("Hello, vimee!");
+const ctx = createInitialContext({ line: 0, col: 0 });
+
+// キーストロークを処理 — 新しいコンテキストとアクションを返す
+const { newCtx, actions } = processKeystroke("x", ctx, buffer);
+// buffer.getContent() === "ello, vimee!"
+```
+
+## 次のステップ
+
+- [インストール](./installation/) — 詳細なインストール手順
+- [クイックスタート](./quickstart/) — 最初の vimee インテグレーションを構築する
+- [パッケージ](../packages/core/) — 利用可能なパッケージを探索する

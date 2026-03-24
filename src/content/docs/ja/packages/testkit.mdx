@@ -1,0 +1,82 @@
+---
+title: "@vimee/testkit"
+description: vimee のテストユーティリティ
+sidebar:
+  order: 6
+---
+
+vimee のエルゴノミックなテストユーティリティ。自然でチェイン可能な構文で Vim 操作テストを記述できます。
+
+## インストール
+
+```bash
+npm install -D @vimee/testkit
+```
+
+## 使い方
+
+```ts
+import { vim } from "@vimee/testkit";
+import { expect, test } from "vitest";
+
+test("dd deletes the current line", () => {
+  const v = vim("line 1\nline 2\nline 3", { cursor: [1, 0] });
+  v.type("dd");
+
+  expect(v.content()).toBe("line 1\nline 3");
+  expect(v.cursor()).toEqual({ line: 1, col: 0 });
+});
+```
+
+## API
+
+### `vim(text, options?)`
+
+テストハーネスを作成します：
+
+```ts
+const v = vim("Hello, World!", {
+  cursor: [0, 5],      // [line, col] 0ベース
+  mode: "normal",       // 開始モード
+  indentStyle: "space", // "space" | "tab"
+  indentWidth: 2,
+});
+```
+
+### VimHarness メソッド
+
+| メソッド | 戻り値 | 説明 |
+|--------|--------|-------------|
+| `.type(keys)` | `VimHarness` | キーシーケンスを送信（チェイン可能） |
+| `.content()` | `string` | バッファコンテンツを取得 |
+| `.cursor()` | `CursorPosition` | カーソル位置を取得（0ベース） |
+| `.mode()` | `VimMode` | 現在の Vim モードを取得 |
+| `.lines()` | `string[]` | すべての行を取得 |
+| `.line(index)` | `string` | 指定インデックスの行を取得（0ベース） |
+| `.register(name)` | `string` | レジスタの内容を取得 |
+| `.actions()` | `VimAction[]` | 最後の `.type()` のアクション |
+| `.allActions()` | `VimAction[]` | 作成以降のすべてのアクション |
+| `.statusMessage()` | `string` | ステータスバーメッセージを取得 |
+| `.raw()` | `{ ctx, buffer }` | 生の VimContext と TextBuffer にアクセス |
+
+### キー表記
+
+```ts
+v.type("dd");           // 行を削除
+v.type("<Esc>");        // Escape
+v.type("<C-d>");        // Ctrl+D
+v.type("<CR>");         // Enter
+v.type("ciw");          // 単語内を変更
+v.type("dw");           // 単語を削除
+```
+
+### チェイン
+
+```ts
+vim("hello world")
+  .type("w")        // "world" に移動
+  .type("dw");      // "world" を削除
+
+// 検証
+expect(vim("hello world").type("wdw").content()).toBe("hello ");
+```

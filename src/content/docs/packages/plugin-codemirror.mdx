@@ -1,0 +1,49 @@
+---
+title: "@vimee/plugin-codemirror"
+description: Vim keybindings for CodeMirror 6
+sidebar:
+  order: 5
+---
+
+Integrate vimee's Vim engine with [CodeMirror 6](https://codemirror.net/).
+
+## Installation
+
+```bash
+npm install @vimee/core @vimee/plugin-codemirror
+```
+
+## Usage
+
+```ts
+import { EditorView, basicSetup } from "codemirror";
+import { attach } from "@vimee/plugin-codemirror";
+
+const view = new EditorView({
+  doc: "console.log('hello');",
+  extensions: [basicSetup],
+  parent: document.getElementById("editor")!,
+});
+
+const vim = attach(view, {
+  onChange: (value) => console.log("Content:", value),
+  onModeChange: (mode) => console.log("Mode:", mode),
+});
+
+// Later: clean up
+vim.destroy();
+```
+
+## API
+
+### `attach(view, options?)`
+
+Same options as `@vimee/plugin-textarea`. Returns `VimCodeMirror` with the same interface: `.getMode()`, `.getCursor()`, `.getContent()`, `.destroy()`.
+
+### Cursor Utilities
+
+```ts
+import { cursorToOffset, offsetToCursor } from "@vimee/plugin-codemirror";
+
+// Convert between vimee's {line, col} and CodeMirror's character offset
+```

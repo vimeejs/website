@@ -1,0 +1,49 @@
+---
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+const tocHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+---
+
+{tocHeadings.length > 0 && (
+  <div class="sticky top-20">
+    <h4 class="text-xs font-semibold uppercase tracking-wider text-text-dim mb-3">On this page</h4>
+    <ul class="space-y-1.5 text-sm" id="toc-list">
+      {tocHeadings.map((h) => (
+        <li style={h.depth === 3 ? "padding-left: 0.75rem" : ""}>
+          <a href={`#${h.slug}`} class="toc-link text-text-dim hover:text-text transition-colors block">
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}
+
+<script>
+  const headingEls = document.querySelectorAll("article h2[id], article h3[id]");
+  const tocLinks = document.querySelectorAll(".toc-link");
+
+  function updateActive() {
+    let current = "";
+    for (const heading of headingEls) {
+      const el = heading as HTMLElement;
+      if (el.getBoundingClientRect().top <= 100) {
+        current = el.id;
+      }
+    }
+    tocLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      const isActive = href === "#" + current;
+      link.classList.toggle("text-accent-bright", isActive);
+      link.classList.toggle("text-text-dim", !isActive);
+    });
+  }
+
+  window.addEventListener("scroll", updateActive, { passive: true });
+  updateActive();
+</script>
