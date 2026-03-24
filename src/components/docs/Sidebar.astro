@@ -1,0 +1,40 @@
+---
+import { getCollection } from "astro:content";
+import { buildSidebar } from "../../lib/sidebar";
+import type { Locale } from "../../lib/i18n";
+
+interface Props {
+  locale: Locale;
+  currentPath: string;
+}
+
+const { locale, currentPath } = Astro.props;
+const allDocs = await getCollection("docs");
+const sidebar = buildSidebar(allDocs, locale);
+---
+
+<nav class="hidden lg:block w-[240px] shrink-0 border-r border-border py-6 px-4 sticky top-14 h-[calc(100vh-3.5rem)] overflow-y-auto">
+  {sidebar.map((group) => (
+    <div class="mb-6">
+      <h3 class="text-xs font-semibold uppercase tracking-wider text-text-dim mb-2">{group.label}</h3>
+      <ul class="space-y-0.5">
+        {group.items.map((item) => {
+          const isActive = currentPath === item.href || currentPath === item.href.slice(0, -1);
+          return (
+            <li>
+              <a
+                href={item.href}
+                class:list={[
+                  "block text-sm py-1 px-2 rounded transition-colors",
+                  isActive ? "bg-accent-dim text-accent-bright font-medium" : "text-text-dim hover:text-text",
+                ]}
+              >
+                {item.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  ))}
+</nav>
