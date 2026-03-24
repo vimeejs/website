@@ -460,6 +460,14 @@ import LiveDemo from "../../components/landing/LiveDemo";
         opacity: 0;
         transform: translateY(16px);
         transition: opacity 0.6s ease, transform 0.6s ease;
+        /* Reset styles that leak into shiki-editor */
+        line-height: normal;
+        font-size: initial;
+      }
+      .demo-container * {
+        box-sizing: content-box;
+        margin: revert;
+        padding: revert;
       }
       .demo-container.revealed {
         opacity: 1;
