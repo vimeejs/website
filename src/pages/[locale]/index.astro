@@ -1,0 +1,28 @@
+---
+export function getStaticPaths() {
+  return [{ params: { locale: "en" } }, { params: { locale: "ja" } }];
+}
+
+const { locale } = Astro.params;
+---
+
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>vimee — Headless Vim Engine for the Web</title>
+    <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body style="background:#0a0a10;color:#e8e6f0;font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;">
+    <div style="text-align:center;">
+      <h1 style="font-size:3rem;font-weight:700;margin-bottom:1rem;">vimee</h1>
+      <p style="opacity:0.5;margin-bottom:2rem;">Headless Vim Engine for the Web</p>
+      <a
+        href={`/${locale}/getting-started/`}
+        style="display:inline-block;background:hsl(280,82%,63%);color:white;font-weight:600;border-radius:8px;padding:0.6rem 1.5rem;text-decoration:none;"
+      >
+        Get Started →
+      </a>
+    </div>
+  </body>
+</html>

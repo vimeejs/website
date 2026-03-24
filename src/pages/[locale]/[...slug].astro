@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import { getLocaleFromId, stripLocalePrefix } from "../../lib/i18n";
+import type { Locale } from "../../lib/i18n";
+
+export async function getStaticPaths() {
+  const docs = await getCollection("docs");
+  const paths = [];
+
+  for (const entry of docs) {
+    const locale = getLocaleFromId(entry.id);
+    const slug = stripLocalePrefix(entry.id);
+    if (slug === "index") continue;
+    paths.push({ params: { locale, slug }, props: { entry } });
+  }
+
+  return paths;
+}
+
+type Props = {
+  entry: Awaited<ReturnType<typeof getCollection<"docs">>>[number];
+};
+const { entry } = Astro.props;
+const { locale } = Astro.params as { locale: Locale };
+const { Content, headings } = await entry.render();
+---
+
+<DocsLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  headings={headings}
+  locale={locale}
+  currentPath={Astro.url.pathname}
+  editUrl={entry.data.editUrl}
+  entryId={entry.id}
+>
+  <Content />
+</DocsLayout>
