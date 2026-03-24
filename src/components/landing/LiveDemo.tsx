@@ -61,7 +61,6 @@ export default function LiveDemo() {
         showLineNumbers={true}
         autoFocus={false}
         onYank={handleYank}
-        onChange={setContent}
       />
     </div>
   );
