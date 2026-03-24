@@ -39,7 +39,8 @@ const t = {
         : "Pure functions are trivially testable. Use @vimee/testkit for ergonomic assertions.",
     },
   },
-  quickstart: isJa ? "クイックスタート" : "Quick Start",
+  liveDemo: isJa ? "ライブデモ" : "Live Demo",
+  liveDemoSub: isJa ? "実際に Vim 操作を試してみてください" : "Try Vim operations right here",
   packages: isJa ? "パッケージ" : "Packages",
 };
 
@@ -51,6 +52,7 @@ const packages = [
   { name: "@vimee/plugin-monaco", desc: "Monaco", href: `/${locale}/packages/plugin-monaco/` },
   { name: "@vimee/plugin-codemirror", desc: "CodeMirror", href: `/${locale}/packages/plugin-codemirror/` },
 ];
+import LiveDemo from "../../components/landing/LiveDemo";
 ---
 
 <html lang={locale} class="dark">
@@ -135,25 +137,12 @@ const packages = [
       </div>
     </section>
 
-    <!-- ═══ QUICKSTART ═══ -->
-    <section class="quickstart">
-      <h2>{t.quickstart}</h2>
-      <div class="code-window">
-        <div class="code-header">
-          <span class="dot" style="background:#ff5f57"></span>
-          <span class="dot" style="background:#febc2e"></span>
-          <span class="dot" style="background:#28c840"></span>
-          <span class="code-filename">quickstart.ts</span>
-        </div>
-        <pre><code><span class="kw">import</span> {'{'} createInitialContext, processKeystroke, TextBuffer {'}'} <span class="kw">from</span> <span class="str">"@vimee/core"</span>;
-
-<span class="cm">// Create a text buffer and initial Vim context</span>
-<span class="kw">const</span> buffer = <span class="kw">new</span> TextBuffer(<span class="str">"Hello, vimee!"</span>);
-<span class="kw">const</span> ctx = createInitialContext({'{'} line: <span class="num">0</span>, col: <span class="num">0</span> {'}'});
-
-<span class="cm">// Process keystrokes — pure function, no side effects</span>
-<span class="kw">const</span> {'{'} newCtx, actions {'}'} = processKeystroke(<span class="str">"x"</span>, ctx, buffer);
-<span class="cm">// buffer.getContent() === "ello, vimee!"</span></code></pre>
+    <!-- ═══ LIVE DEMO ═══ -->
+    <section class="demo-section">
+      <h2>{t.liveDemo}</h2>
+      <p class="demo-sub">{t.liveDemoSub}</p>
+      <div class="demo-container">
+        <LiveDemo client:only="react" />
       </div>
     </section>
 
@@ -204,7 +193,7 @@ const packages = [
         },
         { threshold: 0.1 },
       );
-      document.querySelectorAll(".feature-card, .code-window, .pkg-card").forEach((el) => {
+      document.querySelectorAll(".feature-card, .demo-container, .pkg-card").forEach((el) => {
         observer.observe(el);
       });
     </script>
@@ -283,7 +272,7 @@ const packages = [
         display: flex;
         align-items: center;
         gap: 1.5rem;
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         color: var(--text-dim);
       }
       .nav-links a:hover { color: var(--text); }
@@ -307,16 +296,10 @@ const packages = [
       }
 
       .hero-mascot {
-        width: 72px;
-        height: 72px;
+        width: 80px;
+        height: 80px;
         margin-bottom: 1.5rem;
-        animation: float 4s ease-in-out infinite;
-        filter: drop-shadow(0 0 24px hsla(280, 82%, 63%, 0.3));
-      }
-
-      @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
+        filter: drop-shadow(0 0 20px hsla(280, 82%, 63%, 0.2));
       }
 
       .hero-title {
@@ -334,14 +317,14 @@ const packages = [
 
       .hero-tagline {
         font-family: var(--mono);
-        font-size: clamp(1rem, 2.5vw, 1.35rem);
+        font-size: clamp(1.1rem, 2.5vw, 1.5rem);
         color: var(--text-dim);
         letter-spacing: -0.01em;
         margin-bottom: 0.5rem;
       }
 
       .hero-sub {
-        font-size: 0.9rem;
+        font-size: 1rem;
         color: var(--text-dim);
         opacity: 0.6;
         margin-bottom: 2.5rem;
@@ -361,7 +344,7 @@ const packages = [
         background: var(--accent);
         color: #fff;
         font-weight: 600;
-        font-size: 0.9rem;
+        font-size: 1rem;
         border-radius: 8px;
         transition: all 0.2s;
       }
@@ -379,7 +362,7 @@ const packages = [
         border: 1px solid var(--border);
         color: var(--text-dim);
         font-weight: 500;
-        font-size: 0.9rem;
+        font-size: 1rem;
         border-radius: 8px;
         transition: all 0.2s;
       }
@@ -435,36 +418,42 @@ const packages = [
 
       .feature-card h3 {
         font-family: var(--mono);
-        font-size: 0.95rem;
+        font-size: 1.1rem;
         font-weight: 600;
         margin-bottom: 0.5rem;
         letter-spacing: -0.01em;
       }
 
       .feature-card p {
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         color: var(--text-dim);
         line-height: 1.5;
       }
 
-      /* ══ QUICKSTART ══ */
-      .quickstart {
-        padding: 4rem 2rem 5rem;
-        max-width: 680px;
+      /* ══ LIVE DEMO ══ */
+      .demo-section {
+        padding: 5rem 2rem;
+        max-width: 780px;
         margin: 0 auto;
       }
 
-      .quickstart h2 {
+      .demo-section h2 {
         font-family: var(--mono);
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         font-weight: 600;
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.5rem;
         text-align: center;
         letter-spacing: -0.02em;
       }
 
-      .code-window {
-        background: var(--surface);
+      .demo-sub {
+        text-align: center;
+        color: var(--text-dim);
+        font-size: 1rem;
+        margin-bottom: 2rem;
+      }
+
+      .demo-container {
         border: 1px solid var(--border);
         border-radius: 12px;
         overflow: hidden;
@@ -472,40 +461,10 @@ const packages = [
         transform: translateY(16px);
         transition: opacity 0.6s ease, transform 0.6s ease;
       }
-      .code-window.revealed {
+      .demo-container.revealed {
         opacity: 1;
         transform: translateY(0);
       }
-
-      .code-header {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 0.75rem 1rem;
-        border-bottom: 1px solid var(--border);
-      }
-
-      .dot { width: 10px; height: 10px; border-radius: 50%; }
-
-      .code-filename {
-        font-family: var(--mono);
-        font-size: 0.7rem;
-        color: var(--text-dim);
-        margin-left: 0.75rem;
-      }
-
-      .code-window pre {
-        padding: 1.25rem;
-        overflow-x: auto;
-        font-family: var(--mono);
-        font-size: 0.82rem;
-        line-height: 1.75;
-      }
-
-      .kw { color: hsl(280, 70%, 72%); }
-      .str { color: hsl(140, 55%, 62%); }
-      .num { color: hsl(30, 80%, 65%); }
-      .cm { color: var(--text-dim); }
 
       /* ══ PACKAGES ══ */
       .packages {
@@ -516,7 +475,7 @@ const packages = [
 
       .packages h2 {
         font-family: var(--mono);
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 1.5rem;
         text-align: center;
@@ -550,11 +509,11 @@ const packages = [
       }
       .pkg-card code {
         font-family: var(--mono);
-        font-size: 0.82rem;
+        font-size: 0.95rem;
         color: var(--accent);
       }
       .pkg-card span {
-        font-size: 0.75rem;
+        font-size: 0.85rem;
         color: var(--text-dim);
       }
 
@@ -572,7 +531,7 @@ const packages = [
         margin-bottom: 1rem;
       }
       .footer-links a {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         color: var(--text-dim);
         transition: color 0.2s;
       }
