@@ -31,6 +31,14 @@ const { title, description, headings, locale, currentPath, editUrl, entryId } = 
     <meta name="description" content={description} />
     <link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:title" content={`${title} | vimee`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://assets.vimee.dev/brandresource/promotion-2025-03-25/promo.png" />
+    <meta property="og:type" content="article" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} | vimee`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://assets.vimee.dev/brandresource/promotion-2025-03-25/promo.png" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   </head>
   <body class="bg-bg-primary text-text font-sans antialiased">
