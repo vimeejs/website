@@ -8,18 +8,27 @@ const highlighterPromise = createHighlighter({
   langs: ["typescript"],
 });
 
-const defaultContent = `import { useVim } from "@vimee/react";
+const defaultContent = `import { use } from "react";
+import { Vim } from "@vimee/shiki-editor";
+import { createHighlighter } from "shiki";
+import "@vimee/shiki-editor/styles.css";
 
-function Editor() {
-  const { content, cursor, mode, handleKeyDown } = useVim({
-    content: "Hello, vimee!",
-  });
+const highlighterPromise = createHighlighter({
+  themes: ["github-dark"],
+  langs: ["typescript"],
+});
+
+function App() {
+  const highlighter = use(highlighterPromise);
 
   return (
-    <div onKeyDown={handleKeyDown} tabIndex={0}>
-      <pre>{content}</pre>
-      <span>Mode: {mode}</span>
-    </div>
+    <Vim
+      content="const hello = 'world';"
+      highlighter={highlighter}
+      lang="typescript"
+      theme="github-dark"
+      onChange={(content) => console.log(content)}
+    />
   );
 }`;
 
