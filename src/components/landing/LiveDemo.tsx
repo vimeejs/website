@@ -37,10 +37,6 @@ export default function LiveDemo() {
   const [content, setContent] = useState(initialContent);
   const [key, setKey] = useState(0);
 
-  const handleYank = useCallback((text: string) => {
-    navigator.clipboard.writeText(text).catch(() => {});
-  }, []);
-
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
     const text = e.clipboardData.getData("text/plain");
     if (text) {
@@ -58,9 +54,11 @@ export default function LiveDemo() {
         highlighter={highlighter}
         lang="typescript"
         theme="catppuccin-mocha"
-        showLineNumbers={true}
+        showLineNumbers
         autoFocus={false}
-        onYank={handleYank}
+        indentStyle="space"
+        indentWidth={2}
+        onYank={(text) => navigator.clipboard.writeText(text)}
       />
     </div>
   );
