@@ -1,0 +1,35 @@
+---
+title: "@vimee/react"
+description: vimee の React フックとバインディング
+sidebar:
+  order: 1
+---
+
+vimee の React バインディング。シームレスな統合のためのフックを提供します。
+
+## インストール
+
+```bash
+npm install @vimee/core @vimee/react
+```
+
+## useVimEditor
+
+React コンポーネントに vimee を統合するための主要フック：
+
+```tsx
+import { useVimEditor } from "@vimee/react";
+
+function Editor() {
+  const { state, onKeyDown } = useVimEditor({
+    initialContent: "Hello, vimee!",
+  });
+
+  return (
+    <div onKeyDown={onKeyDown} tabIndex={0}>
+      <pre>{state.content}</pre>
+      <div>Mode: {state.mode} | Cursor: {state.cursor.line}:{state.cursor.col}</div>
+    </div>
+  );
+}
+```

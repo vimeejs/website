@@ -1,0 +1,37 @@
+---
+title: カスタムコマンド
+description: vimee でカスタム Vim コマンドを定義する方法
+sidebar:
+  order: 1
+---
+
+vimee の純粋関数アーキテクチャにより、カスタムコマンドの拡張が容易です。
+
+## カスタムコマンドの定義
+
+すべての操作が純粋関数なので、それらを組み合わせてカスタム動作を作成できます：
+
+```ts
+import { createEditor, processKey, type EditorState } from "@vimee/core";
+
+function clearLine(state: EditorState): EditorState {
+  // 行頭に移動し、行末まで削除
+  let next = processKey(state, { key: "0" });
+  next = processKey(next, { key: "d" });
+  next = processKey(next, { key: "$" });
+  return next;
+}
+```
+
+## 操作の合成
+
+vimee は純粋関数で構築されているため、操作を自由に合成できます：
+
+```ts
+function duplicateLine(state: EditorState): EditorState {
+  let next = processKey(state, { key: "y" });
+  next = processKey(next, { key: "y" }); // yy — 行をヤンク
+  next = processKey(next, { key: "p" }); // p — 下に貼り付け
+  return next;
+}
+```

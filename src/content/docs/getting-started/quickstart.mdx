@@ -1,0 +1,62 @@
+---
+title: Quick Start
+description: Build your first vimee integration in minutes
+sidebar:
+  order: 2
+---
+
+## Basic usage with pure functions
+
+vimee's core API is built around pure functions. You create an editor state and transform it with key events:
+
+```ts
+import { createEditor, processKey } from "@vimee/core";
+
+// Create an initial editor state
+const editor = createEditor({
+  content: "Hello, World!",
+});
+
+// Process key events — returns a new state (no mutation)
+const state1 = processKey(editor, { key: "l" }); // move right
+const state2 = processKey(state1, { key: "x" }); // delete character
+```
+
+## With React
+
+Use `@vimee/react` for seamless React integration:
+
+```tsx
+import { useVimEditor } from "@vimee/react";
+
+function MyEditor() {
+  const { state, onKeyDown } = useVimEditor({
+    initialContent: "Hello, vimee!",
+  });
+
+  return (
+    <div onKeyDown={onKeyDown} tabIndex={0}>
+      <pre>{state.content}</pre>
+      <span>Mode: {state.mode}</span>
+    </div>
+  );
+}
+```
+
+## With Shiki Editor
+
+For a full-featured editor with syntax highlighting:
+
+```tsx
+import { ShikiEditor } from "@vimee/shiki-editor";
+
+function App() {
+  return (
+    <ShikiEditor
+      initialContent="console.log('Hello!');"
+      language="typescript"
+      theme="github-dark"
+    />
+  );
+}
+```

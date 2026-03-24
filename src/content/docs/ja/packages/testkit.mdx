@@ -1,0 +1,31 @@
+---
+title: "@vimee/testkit"
+description: vimee のテストユーティリティ
+sidebar:
+  order: 6
+---
+
+vimee のエルゴノミックなテストユーティリティ。自然で読みやすい構文で Vim 操作テストを記述できます。
+
+## インストール
+
+```bash
+npm install -D @vimee/testkit
+```
+
+## 使い方
+
+```ts
+import { testEditor } from "@vimee/testkit";
+
+// 'dd' が現在の行を削除することをテスト
+testEditor("dd deletes a line", {
+  content: "line 1\nline 2\nline 3",
+  cursor: { line: 1, col: 0 },
+  keys: "dd",
+  expected: {
+    content: "line 1\nline 3",
+    cursor: { line: 1, col: 0 },
+  },
+});
+```

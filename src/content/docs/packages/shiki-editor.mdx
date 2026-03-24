@@ -1,0 +1,39 @@
+---
+title: "@vimee/shiki-editor"
+description: Syntax-highlighted Vim editor powered by Shiki
+sidebar:
+  order: 2
+---
+
+A full-featured Vim editor component with syntax highlighting powered by [Shiki](https://shiki.matsu.io/).
+
+## Installation
+
+```bash
+npm install @vimee/core @vimee/react @vimee/shiki-editor
+```
+
+## Usage
+
+```tsx
+import { ShikiEditor } from "@vimee/shiki-editor";
+
+function App() {
+  return (
+    <ShikiEditor
+      initialContent="const hello = 'world';"
+      language="typescript"
+      theme="github-dark"
+    />
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `initialContent` | `string` | Initial editor content |
+| `language` | `string` | Shiki language identifier |
+| `theme` | `string` | Shiki theme name |
+| `onChange` | `(content: string) => void` | Callback when content changes |

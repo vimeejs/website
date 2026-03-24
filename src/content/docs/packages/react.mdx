@@ -1,0 +1,35 @@
+---
+title: "@vimee/react"
+description: React hooks and bindings for vimee
+sidebar:
+  order: 1
+---
+
+React bindings for vimee, providing hooks for seamless integration.
+
+## Installation
+
+```bash
+npm install @vimee/core @vimee/react
+```
+
+## useVimEditor
+
+The primary hook for integrating vimee into a React component:
+
+```tsx
+import { useVimEditor } from "@vimee/react";
+
+function Editor() {
+  const { state, onKeyDown } = useVimEditor({
+    initialContent: "Hello, vimee!",
+  });
+
+  return (
+    <div onKeyDown={onKeyDown} tabIndex={0}>
+      <pre>{state.content}</pre>
+      <div>Mode: {state.mode} | Cursor: {state.cursor.line}:{state.cursor.col}</div>
+    </div>
+  );
+}
+```

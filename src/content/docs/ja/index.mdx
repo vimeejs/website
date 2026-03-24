@@ -1,0 +1,53 @@
+---
+title: vimee
+description: Web 向けヘッドレス Vim エンジン — 純粋関数。依存なし。あらゆるフレームワークに対応。
+template: splash
+hero:
+  title: vimee
+  tagline: Web 向けヘッドレス Vim エンジン
+  image:
+    html: <img src="https://assets.vimee.dev/brandresource/vimee.svg" alt="vimee ghost mascot" width="200" height="200" style="animation:float 3s ease-in-out infinite" />
+  actions:
+    - text: はじめる
+      link: /ja/getting-started/
+      icon: right-arrow
+      variant: primary
+    - text: GitHub で見る
+      link: https://github.com/vimeejs/vimee
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <Card title="純粋関数" icon="pencil">
+    すべての操作は状態を入力し、新しい状態を出力します。ミューテーションなし、サプライズなし。
+  </Card>
+  <Card title="依存なし" icon="seti:lock">
+    コアエンジンに外部依存はありません。バンドルを軽量に保ちます。
+  </Card>
+  <Card title="あらゆるフレームワーク" icon="puzzle">
+    React、Vue、Svelte、バニラ JS。UI はあなたが持ち込み、vimee が Vim ロジックを担当します。
+  </Card>
+  <Card title="テスタブル" icon="approve-check-circle">
+    純粋関数は簡単にテストできます。`@vimee/testkit` でエルゴノミックなアサーションが可能です。
+  </Card>
+</CardGrid>
+
+## クイックスタート
+
+```bash
+npm install @vimee/core
+```
+
+```ts
+import { createEditor, processKey } from "@vimee/core";
+
+// エディター状態を作成 — データだけ、副作用なし
+const editor = createEditor({ content: "Hello, vimee!" });
+
+// すべての操作は純粋関数: 状態を入力、状態を出力
+const next = processKey(editor, { key: "x" });
+// next.content === "ello, vimee!"
+```

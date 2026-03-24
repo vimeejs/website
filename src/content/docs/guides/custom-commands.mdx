@@ -1,0 +1,37 @@
+---
+title: Custom Commands
+description: How to define custom Vim commands in vimee
+sidebar:
+  order: 1
+---
+
+vimee's pure function architecture makes it easy to extend with custom commands.
+
+## Defining a Custom Command
+
+Since all operations are pure functions, you can compose them to create custom behavior:
+
+```ts
+import { createEditor, processKey, type EditorState } from "@vimee/core";
+
+function clearLine(state: EditorState): EditorState {
+  // Move to start of line, then delete to end
+  let next = processKey(state, { key: "0" });
+  next = processKey(next, { key: "d" });
+  next = processKey(next, { key: "$" });
+  return next;
+}
+```
+
+## Composing Operations
+
+Because vimee is built on pure functions, you can freely compose operations:
+
+```ts
+function duplicateLine(state: EditorState): EditorState {
+  let next = processKey(state, { key: "y" });
+  next = processKey(next, { key: "y" }); // yy — yank line
+  next = processKey(next, { key: "p" }); // p — paste below
+  return next;
+}
+```

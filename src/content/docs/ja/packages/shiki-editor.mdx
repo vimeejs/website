@@ -1,0 +1,39 @@
+---
+title: "@vimee/shiki-editor"
+description: Shiki を使用した構文ハイライト Vim エディター
+sidebar:
+  order: 2
+---
+
+[Shiki](https://shiki.matsu.io/) による構文ハイライト付きのフル機能 Vim エディターコンポーネント。
+
+## インストール
+
+```bash
+npm install @vimee/core @vimee/react @vimee/shiki-editor
+```
+
+## 使い方
+
+```tsx
+import { ShikiEditor } from "@vimee/shiki-editor";
+
+function App() {
+  return (
+    <ShikiEditor
+      initialContent="const hello = 'world';"
+      language="typescript"
+      theme="github-dark"
+    />
+  );
+}
+```
+
+## Props
+
+| Prop | 型 | 説明 |
+|------|------|-------------|
+| `initialContent` | `string` | 初期エディターコンテンツ |
+| `language` | `string` | Shiki 言語識別子 |
+| `theme` | `string` | Shiki テーマ名 |
+| `onChange` | `(content: string) => void` | コンテンツ変更時のコールバック |

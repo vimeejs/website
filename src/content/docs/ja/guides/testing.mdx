@@ -1,0 +1,43 @@
+---
+title: テスト
+description: vimee インテグレーションのテスト方法
+sidebar:
+  order: 2
+---
+
+vimee は純粋関数で構築されているため、テストは簡単です — モックなし、DOM なし、入力と出力だけ。
+
+## @vimee/testkit を使う
+
+```bash
+npm install -D @vimee/testkit
+```
+
+```ts
+import { testEditor } from "@vimee/testkit";
+
+testEditor("x がカーソル下の文字を削除する", {
+  content: "hello",
+  cursor: { line: 0, col: 0 },
+  keys: "x",
+  expected: {
+    content: "ello",
+    cursor: { line: 0, col: 0 },
+  },
+});
+```
+
+## testkit なしでテスト
+
+コア API を使ったプレーンなアサーションでもテストできます：
+
+```ts
+import { createEditor, processKey } from "@vimee/core";
+import { expect, test } from "vitest";
+
+test("i で insert モードに入る", () => {
+  const editor = createEditor({ content: "hello" });
+  const result = processKey(editor, { key: "i" });
+  expect(result.mode).toBe("insert");
+});
+```

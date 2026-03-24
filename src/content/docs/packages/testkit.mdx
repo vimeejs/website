@@ -1,0 +1,31 @@
+---
+title: "@vimee/testkit"
+description: Testing utilities for vimee
+sidebar:
+  order: 6
+---
+
+Ergonomic testing utilities for vimee. Write Vim operation tests with a natural, readable syntax.
+
+## Installation
+
+```bash
+npm install -D @vimee/testkit
+```
+
+## Usage
+
+```ts
+import { testEditor } from "@vimee/testkit";
+
+// Test that 'dd' deletes the current line
+testEditor("dd deletes a line", {
+  content: "line 1\nline 2\nline 3",
+  cursor: { line: 1, col: 0 },
+  keys: "dd",
+  expected: {
+    content: "line 1\nline 3",
+    cursor: { line: 1, col: 0 },
+  },
+});
+```

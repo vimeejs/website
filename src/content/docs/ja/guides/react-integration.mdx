@@ -1,0 +1,64 @@
+---
+title: React インテグレーション
+description: React アプリケーションへの vimee の統合方法
+sidebar:
+  order: 0
+---
+
+このガイドでは、React アプリケーションに vimee を段階的に統合する方法を説明します。
+
+## セットアップ
+
+必要なパッケージをインストール：
+
+```bash
+npm install @vimee/core @vimee/react
+```
+
+## 基本的なエディターコンポーネント
+
+```tsx
+import { useVimEditor } from "@vimee/react";
+
+function VimEditor() {
+  const { state, onKeyDown } = useVimEditor({
+    initialContent: "",
+  });
+
+  return (
+    <div
+      onKeyDown={onKeyDown}
+      tabIndex={0}
+      style={{
+        fontFamily: "monospace",
+        padding: "1rem",
+        minHeight: "200px",
+        background: "#1a1a2e",
+        color: "#e0e0e0",
+      }}
+    >
+      <pre>{state.content}</pre>
+    </div>
+  );
+}
+```
+
+## モードの表示
+
+ユーザーがエディターの状態を理解できるよう、現在の Vim モードを表示します：
+
+```tsx
+function StatusBar({ mode }: { mode: string }) {
+  const modeColors: Record<string, string> = {
+    normal: "#7c3aed",
+    insert: "#10b981",
+    visual: "#f59e0b",
+  };
+
+  return (
+    <div style={{ background: modeColors[mode] || "#333", padding: "0.25rem 0.5rem" }}>
+      -- {mode.toUpperCase()} --
+    </div>
+  );
+}
+```

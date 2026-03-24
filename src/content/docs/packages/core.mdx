@@ -1,0 +1,55 @@
+---
+title: "@vimee/core"
+description: The core Vim engine — pure functions, zero dependencies
+sidebar:
+  order: 0
+---
+
+The core package provides the Vim engine as a collection of pure functions. No framework bindings, no UI — just the engine.
+
+## Installation
+
+```bash
+npm install @vimee/core
+```
+
+## Key Concepts
+
+### Editor State
+
+All editor state is represented as a plain object:
+
+```ts
+import { createEditor } from "@vimee/core";
+
+const editor = createEditor({
+  content: "Hello, World!",
+});
+
+// editor.content  — the text content
+// editor.cursor   — cursor position
+// editor.mode     — current Vim mode (normal, insert, visual, etc.)
+```
+
+### Processing Keys
+
+Every key press is processed by a pure function that returns a new state:
+
+```ts
+import { processKey } from "@vimee/core";
+
+const next = processKey(editor, { key: "i" }); // enter insert mode
+// next.mode === "insert"
+```
+
+### Motions and Operators
+
+vimee supports standard Vim motions and operators:
+
+```ts
+// Motions: h, j, k, l, w, b, e, 0, $, gg, G, ...
+// Operators: d, c, y, ...
+// Combined: dw, ci", yy, ...
+const result = processKey(editor, { key: "d" });
+const final = processKey(result, { key: "w" }); // delete word
+```

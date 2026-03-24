@@ -1,0 +1,72 @@
+---
+title: インストール
+description: vimee パッケージのインストール方法
+sidebar:
+  order: 1
+---
+
+## コアパッケージのインストール
+
+import { Tabs, TabItem } from "@astrojs/starlight/components";
+
+<Tabs>
+  <TabItem label="npm">
+    ```bash
+    npm install @vimee/core
+    ```
+  </TabItem>
+  <TabItem label="pnpm">
+    ```bash
+    pnpm add @vimee/core
+    ```
+  </TabItem>
+  <TabItem label="bun">
+    ```bash
+    bun add @vimee/core
+    ```
+  </TabItem>
+</Tabs>
+
+## React と一緒に
+
+React を使用している場合は、React バインディングもインストールしてください：
+
+<Tabs>
+  <TabItem label="npm">
+    ```bash
+    npm install @vimee/core @vimee/react
+    ```
+  </TabItem>
+  <TabItem label="pnpm">
+    ```bash
+    pnpm add @vimee/core @vimee/react
+    ```
+  </TabItem>
+  <TabItem label="bun">
+    ```bash
+    bun add @vimee/core @vimee/react
+    ```
+  </TabItem>
+</Tabs>
+
+## エディター UI と一緒に
+
+vimee はさまざまなユースケースに対応するエディタープラグインを提供しています：
+
+| パッケージ | 説明 |
+|---------|-------------|
+| `@vimee/shiki-editor` | Shiki を使用した構文ハイライトエディター |
+| `@vimee/plugin-textarea` | シンプルな textarea ベースのエディター |
+| `@vimee/plugin-monaco` | Monaco Editor 統合 |
+| `@vimee/plugin-codemirror` | CodeMirror 統合 |
+
+ニーズに合ったものをインストールしてください：
+
+```bash
+npm install @vimee/core @vimee/plugin-monaco
+```
+
+## 要件
+
+- Node.js 18+
+- TypeScript 5.0+（推奨）

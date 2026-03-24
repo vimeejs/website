@@ -1,0 +1,62 @@
+---
+title: クイックスタート
+description: 数分で最初の vimee インテグレーションを構築する
+sidebar:
+  order: 2
+---
+
+## 純粋関数での基本的な使い方
+
+vimee のコア API は純粋関数を中心に構築されています。エディター状態を作成し、キーイベントで変換します：
+
+```ts
+import { createEditor, processKey } from "@vimee/core";
+
+// 初期エディター状態を作成
+const editor = createEditor({
+  content: "Hello, World!",
+});
+
+// キーイベントを処理 — 新しい状態を返す（ミューテーションなし）
+const state1 = processKey(editor, { key: "l" }); // 右に移動
+const state2 = processKey(state1, { key: "x" }); // 文字を削除
+```
+
+## React と一緒に
+
+`@vimee/react` でシームレスな React 統合：
+
+```tsx
+import { useVimEditor } from "@vimee/react";
+
+function MyEditor() {
+  const { state, onKeyDown } = useVimEditor({
+    initialContent: "Hello, vimee!",
+  });
+
+  return (
+    <div onKeyDown={onKeyDown} tabIndex={0}>
+      <pre>{state.content}</pre>
+      <span>Mode: {state.mode}</span>
+    </div>
+  );
+}
+```
+
+## Shiki Editor と一緒に
+
+構文ハイライト付きのフル機能エディター：
+
+```tsx
+import { ShikiEditor } from "@vimee/shiki-editor";
+
+function App() {
+  return (
+    <ShikiEditor
+      initialContent="console.log('Hello!');"
+      language="typescript"
+      theme="github-dark"
+    />
+  );
+}
+```

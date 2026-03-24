@@ -1,0 +1,55 @@
+---
+title: "@vimee/core"
+description: コア Vim エンジン — 純粋関数、依存なし
+sidebar:
+  order: 0
+---
+
+コアパッケージは、Vim エンジンを純粋関数のコレクションとして提供します。フレームワークバインディングなし、UI なし — エンジンだけ。
+
+## インストール
+
+```bash
+npm install @vimee/core
+```
+
+## 主要な概念
+
+### エディター状態
+
+すべてのエディター状態はプレーンオブジェクトとして表現されます：
+
+```ts
+import { createEditor } from "@vimee/core";
+
+const editor = createEditor({
+  content: "Hello, World!",
+});
+
+// editor.content  — テキストコンテンツ
+// editor.cursor   — カーソル位置
+// editor.mode     — 現在の Vim モード（normal, insert, visual, etc.）
+```
+
+### キー処理
+
+すべてのキー入力は、新しい状態を返す純粋関数で処理されます：
+
+```ts
+import { processKey } from "@vimee/core";
+
+const next = processKey(editor, { key: "i" }); // insert モードに入る
+// next.mode === "insert"
+```
+
+### モーションとオペレーター
+
+vimee は標準的な Vim モーションとオペレーターをサポートします：
+
+```ts
+// モーション: h, j, k, l, w, b, e, 0, $, gg, G, ...
+// オペレーター: d, c, y, ...
+// 組み合わせ: dw, ci", yy, ...
+const result = processKey(editor, { key: "d" });
+const final = processKey(result, { key: "w" }); // 単語を削除
+```
