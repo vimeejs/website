@@ -5,25 +5,34 @@ sidebar:
   order: 2
 ---
 
-A full-featured Vim editor component with syntax highlighting powered by [Shiki](https://shiki.matsu.io/).
+A full-featured Vim editor component with syntax highlighting powered by [Shiki](https://shiki.style/).
 
 ## Installation
 
 ```bash
-npm install @vimee/core @vimee/react @vimee/shiki-editor
+npm install @vimee/core @vimee/react @vimee/shiki-editor shiki
 ```
 
 ## Usage
 
 ```tsx
-import { ShikiEditor } from "@vimee/shiki-editor";
+import { Vim } from "@vimee/shiki-editor";
+import { createHighlighter } from "shiki";
+import "@vimee/shiki-editor/styles.css";
+
+const highlighter = await createHighlighter({
+  themes: ["github-dark"],
+  langs: ["typescript"],
+});
 
 function App() {
   return (
-    <ShikiEditor
-      initialContent="const hello = 'world';"
-      language="typescript"
+    <Vim
+      content="const hello = 'world';"
+      highlighter={highlighter}
+      lang="typescript"
       theme="github-dark"
+      onChange={(content) => console.log(content)}
     />
   );
 }
@@ -31,9 +40,43 @@ function App() {
 
 ## Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `initialContent` | `string` | Initial editor content |
-| `language` | `string` | Shiki language identifier |
-| `theme` | `string` | Shiki theme name |
-| `onChange` | `(content: string) => void` | Callback when content changes |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `content` | `string` | (required) | Editor content |
+| `highlighter` | `HighlighterGeneric` | (required) | Shiki highlighter instance |
+| `lang` | `string` | (required) | Language identifier |
+| `theme` | `string` | (required) | Shiki theme name |
+| `shikiOptions` | `Record<string, unknown>` | — | Extra Shiki options |
+| `cursorPosition` | `string` | `"1:1"` | Initial cursor (1-based) |
+| `onChange` | `(content: string) => void` | — | Content change callback |
+| `onYank` | `(text: string) => void` | — | Yank callback |
+| `onSave` | `(content: string) => void` | — | Save callback |
+| `onModeChange` | `(mode: VimMode) => void` | — | Mode change callback |
+| `onAction` | `(action: VimAction, key: string) => void` | — | Action callback |
+| `className` | `string` | — | Container CSS class |
+| `readOnly` | `boolean` | `false` | Disable editing |
+| `autoFocus` | `boolean` | `false` | Auto-focus on mount |
+| `indentStyle` | `"space" \| "tab"` | `"space"` | Indent character |
+| `indentWidth` | `number` | `2` | Indent width |
+| `showLineNumbers` | `boolean` | `true` | Show line numbers |
+
+## Sub-components
+
+The package also exports individual sub-components for custom layouts:
+
+- `<Cursor />` — Renders the editor cursor
+- `<Line />` — Renders a single highlighted line
+- `<StatusLine />` — Renders the Vim status bar
+
+## Hooks
+
+- `useShikiTokens(highlighter, content, lang, theme, extraOptions?)` — Tokenize content with Shiki
+- `computeSelectionInfo(cursor, visualAnchor, buffer)` — Compute visual selection ranges
+
+## CSS
+
+Import the base styles:
+
+```ts
+import "@vimee/shiki-editor/styles.css";
+```

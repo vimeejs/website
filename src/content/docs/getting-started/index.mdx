@@ -21,10 +21,14 @@ npm install @vimee/core
 ```
 
 ```ts
-import { createEditor, processKey } from "@vimee/core";
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
 
-const editor = createEditor({ content: "Hello, vimee!" });
-const next = processKey(editor, { key: "x" });
+const buffer = new TextBuffer("Hello, vimee!");
+const ctx = createInitialContext({ line: 0, col: 0 });
+
+// Process a keystroke — returns new context + actions
+const { newCtx, actions } = processKeystroke("x", ctx, buffer);
+// buffer.getContent() === "ello, vimee!"
 ```
 
 ## Next Steps

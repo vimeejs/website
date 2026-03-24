@@ -49,22 +49,57 @@ If you're using React, install the React bindings as well:
   </div>
 </Tabs>
 
-## With an editor UI
+## With React Component
+
+For a full-featured editor with syntax highlighting powered by Shiki:
+
+<Tabs labels={["npm", "pnpm", "bun"]}>
+  <div class="tab-panel">
+    ```bash
+    npm install @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    pnpm add @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    bun add @vimee/core @vimee/react @vimee/shiki-editor shiki
+    ```
+  </div>
+</Tabs>
+
+## With an editor plugin
 
 vimee provides several editor plugins for different use cases:
 
 | Package | Description |
 |---------|-------------|
-| `@vimee/shiki-editor` | Syntax-highlighted editor powered by Shiki |
-| `@vimee/plugin-textarea` | Simple textarea-based editor |
+| `@vimee/plugin-textarea` | Attach Vim keybindings to any HTML textarea |
 | `@vimee/plugin-monaco` | Monaco Editor integration |
-| `@vimee/plugin-codemirror` | CodeMirror integration |
+| `@vimee/plugin-codemirror` | CodeMirror 6 integration |
 
 Install the one that fits your needs:
 
-```bash
-npm install @vimee/core @vimee/plugin-monaco
-```
+<Tabs labels={["npm", "pnpm", "bun"]}>
+  <div class="tab-panel">
+    ```bash
+    npm install @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    pnpm add @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+  <div class="tab-panel">
+    ```bash
+    bun add @vimee/core @vimee/plugin-textarea
+    ```
+  </div>
+</Tabs>
 
 ## Requirements
 

@@ -15,31 +15,58 @@ npm install @vimee/core
 
 ## Key Concepts
 
-### Editor State
+### TextBuffer
 
-All editor state is represented as a plain object:
+A mutable text buffer that manages content and undo history:
 
 ```ts
-import { createEditor } from "@vimee/core";
+import { TextBuffer } from "@vimee/core";
 
-const editor = createEditor({
-  content: "Hello, World!",
-});
+const buffer = new TextBuffer("Hello, World!");
 
-// editor.content  — the text content
-// editor.cursor   — cursor position
-// editor.mode     — current Vim mode (normal, insert, visual, etc.)
+buffer.getContent();    // "Hello, World!"
+buffer.getLine(0);      // "Hello, World!"
+buffer.getLineCount();  // 1
 ```
 
-### Processing Keys
+### VimContext
 
-Every key press is processed by a pure function that returns a new state:
+All Vim state is represented in a `VimContext` object:
 
 ```ts
-import { processKey } from "@vimee/core";
+import { createInitialContext } from "@vimee/core";
 
-const next = processKey(editor, { key: "i" }); // enter insert mode
-// next.mode === "insert"
+const ctx = createInitialContext({ line: 0, col: 0 });
+
+// ctx.mode    — "normal", "insert", "visual", etc.
+// ctx.cursor  — { line: 0, col: 0 }
+// ctx.phase   — "idle", "operator-pending", etc.
+```
+
+### Processing Keystrokes
+
+Every keystroke is processed by a pure function that returns a new context and a list of actions:
+
+```ts
+import { processKeystroke } from "@vimee/core";
+
+const { newCtx, actions } = processKeystroke("i", ctx, buffer);
+// newCtx.mode === "insert"
+// actions === [{ type: "mode-change", mode: "insert" }]
+```
+
+### Actions
+
+Actions describe what happened as a result of a keystroke:
+
+```ts
+import { actions } from "@vimee/core";
+
+// Create actions programmatically
+actions.cursorMove({ line: 0, col: 5 });
+actions.modeChange("insert");
+actions.contentChange("new content");
+actions.statusMessage("-- INSERT --");
 ```
 
 ### Motions and Operators
@@ -48,8 +75,17 @@ vimee supports standard Vim motions and operators:
 
 ```ts
 // Motions: h, j, k, l, w, b, e, 0, $, gg, G, ...
-// Operators: d, c, y, ...
+// Operators: d, c, y, >, <
 // Combined: dw, ci", yy, ...
-const result = processKey(editor, { key: "d" });
-const final = processKey(result, { key: "w" }); // delete word
+const r1 = processKeystroke("d", ctx, buffer);
+const r2 = processKeystroke("w", r1.newCtx, buffer); // delete word
+```
+
+### Custom Keybindings
+
+```ts
+import { createKeybindMap } from "@vimee/core";
+
+const keybinds = createKeybindMap();
+// Use with processKeystroke's keybinds parameter
 ```

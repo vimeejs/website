@@ -7,19 +7,18 @@ sidebar:
 
 ## Basic usage with pure functions
 
-vimee's core API is built around pure functions. You create an editor state and transform it with key events:
+vimee's core API is built around pure functions. You create a buffer and context, then process keystrokes:
 
 ```ts
-import { createEditor, processKey } from "@vimee/core";
+import { createInitialContext, processKeystroke, TextBuffer } from "@vimee/core";
 
-// Create an initial editor state
-const editor = createEditor({
-  content: "Hello, World!",
-});
+// Create a text buffer and initial Vim context
+const buffer = new TextBuffer("Hello, World!");
+const ctx = createInitialContext({ line: 0, col: 0 });
 
-// Process key events — returns a new state (no mutation)
-const state1 = processKey(editor, { key: "l" }); // move right
-const state2 = processKey(state1, { key: "x" }); // delete character
+// Process keystrokes — each returns a new context and list of actions
+const result1 = processKeystroke("l", ctx, buffer);     // move right
+const result2 = processKeystroke("x", result1.newCtx, buffer); // delete char
 ```
 
 ## With React
@@ -27,17 +26,17 @@ const state2 = processKey(state1, { key: "x" }); // delete character
 Use `@vimee/react` for seamless React integration:
 
 ```tsx
-import { useVimEditor } from "@vimee/react";
+import { useVim } from "@vimee/react";
 
 function MyEditor() {
-  const { state, onKeyDown } = useVimEditor({
-    initialContent: "Hello, vimee!",
+  const { content, cursor, mode, handleKeyDown } = useVim({
+    content: "Hello, vimee!",
   });
 
   return (
-    <div onKeyDown={onKeyDown} tabIndex={0}>
-      <pre>{state.content}</pre>
-      <span>Mode: {state.mode}</span>
+    <div onKeyDown={handleKeyDown} tabIndex={0}>
+      <pre>{content}</pre>
+      <span>Mode: {mode} | Cursor: {cursor.line}:{cursor.col}</span>
     </div>
   );
 }
@@ -48,13 +47,21 @@ function MyEditor() {
 For a full-featured editor with syntax highlighting:
 
 ```tsx
-import { ShikiEditor } from "@vimee/shiki-editor";
+import { Vim } from "@vimee/shiki-editor";
+import { createHighlighter } from "shiki";
+import "@vimee/shiki-editor/styles.css";
+
+const highlighter = await createHighlighter({
+  themes: ["github-dark"],
+  langs: ["typescript"],
+});
 
 function App() {
   return (
-    <ShikiEditor
-      initialContent="console.log('Hello!');"
-      language="typescript"
+    <Vim
+      content="console.log('Hello!');"
+      highlighter={highlighter}
+      lang="typescript"
       theme="github-dark"
     />
   );

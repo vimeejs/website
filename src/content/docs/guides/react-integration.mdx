@@ -18,16 +18,16 @@ npm install @vimee/core @vimee/react
 ## Basic Editor Component
 
 ```tsx
-import { useVimEditor } from "@vimee/react";
+import { useVim } from "@vimee/react";
 
 function VimEditor() {
-  const { state, onKeyDown } = useVimEditor({
-    initialContent: "",
+  const { content, cursor, mode, handleKeyDown } = useVim({
+    content: "",
   });
 
   return (
     <div
-      onKeyDown={onKeyDown}
+      onKeyDown={handleKeyDown}
       tabIndex={0}
       style={{
         fontFamily: "monospace",
@@ -37,7 +37,7 @@ function VimEditor() {
         color: "#e0e0e0",
       }}
     >
-      <pre>{state.content}</pre>
+      <pre>{content}</pre>
     </div>
   );
 }
@@ -59,6 +59,63 @@ function StatusBar({ mode }: { mode: string }) {
     <div style={{ background: modeColors[mode] || "#333", padding: "0.25rem 0.5rem" }}>
       -- {mode.toUpperCase()} --
     </div>
+  );
+}
+```
+
+## Full Example with Callbacks
+
+```tsx
+import { useVim } from "@vimee/react";
+
+function FullEditor() {
+  const { content, cursor, mode, statusMessage, handleKeyDown } = useVim({
+    content: "Hello, vimee!",
+    onChange: (content) => console.log("Content changed:", content),
+    onModeChange: (mode) => console.log("Mode:", mode),
+    onSave: (content) => console.log("Saved:", content),
+  });
+
+  return (
+    <div>
+      <div onKeyDown={handleKeyDown} tabIndex={0} style={{ fontFamily: "monospace" }}>
+        <pre>{content}</pre>
+      </div>
+      <StatusBar mode={mode} />
+      <div>Cursor: {cursor.line}:{cursor.col}</div>
+      {statusMessage && <div>{statusMessage}</div>}
+    </div>
+  );
+}
+```
+
+## Using the Shiki Editor Component
+
+For syntax highlighting, use `@vimee/shiki-editor`:
+
+```bash
+npm install @vimee/core @vimee/react @vimee/shiki-editor shiki
+```
+
+```tsx
+import { Vim } from "@vimee/shiki-editor";
+import { createHighlighter } from "shiki";
+import "@vimee/shiki-editor/styles.css";
+
+const highlighter = await createHighlighter({
+  themes: ["github-dark"],
+  langs: ["typescript"],
+});
+
+function App() {
+  return (
+    <Vim
+      content="const greeting = 'Hello, World!';"
+      highlighter={highlighter}
+      lang="typescript"
+      theme="github-dark"
+      onChange={(content) => console.log(content)}
+    />
   );
 }
 ```
