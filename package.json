@@ -15,7 +15,7 @@
     "@tailwindcss/typography": "0.5.19",
     "@tailwindcss/vite": "4.2.2",
     "@vimee/core": "0.3.0",
-    "@vimee/react": "0.2.0",
+    "@vimee/react": "0.3.0",
     "@vimee/shiki-editor": "0.2.0",
     "astro": "6.0.8",
     "ogl": "1.0.11",

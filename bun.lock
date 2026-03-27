@@ -11,7 +11,7 @@
         "@tailwindcss/typography": "0.5.19",
         "@tailwindcss/vite": "4.2.2",
         "@vimee/core": "0.3.0",
-        "@vimee/react": "0.2.0",
+        "@vimee/react": "0.3.0",
         "@vimee/shiki-editor": "0.2.0",
         "astro": "6.0.8",
         "ogl": "1.0.11",
@@ -386,7 +386,7 @@
 
     "@vimee/core": ["@vimee/core@0.3.0", "", {}, "sha512-aC44fw6HhmjrbJMafAk3oUZIDpFbgNebbDsWwMIFD0WwnOUZPETgzU3HYQetmwz0e38JY3I/g8CJXRQjspgJZw=="],
 
-    "@vimee/react": ["@vimee/react@0.2.0", "", { "peerDependencies": { "@vimee/core": ">=0.1.0", "react": ">=18.0.0" } }, "sha512-s17NVrnzRq05k9TDtRWYFDfhXlELC4QJI9ItXVqa7+4zSknBLg3NewxpnlLe3bvY9bof7jo2pO0+McgZrq+jmQ=="],
+    "@vimee/react": ["@vimee/react@0.3.0", "", { "peerDependencies": { "@vimee/core": ">=0.1.0 <1.0.0", "react": "^19.0.0" } }, "sha512-7rzoHwEaovR7y0ESwiMBpclXJMpE1gBOdo2jmhkM/uN2vikbBtLMzZptU5nkCzjTP3Bi+U941nCVHuEh2k8TCg=="],
 
     "@vimee/shiki-editor": ["@vimee/shiki-editor@0.2.0", "", { "peerDependencies": { "@vimee/core": ">=0.1.0", "@vimee/react": ">=0.1.0", "react": ">=18.0.0", "react-dom": ">=18.0.0", "shiki": ">=1.0.0" } }, "sha512-wy3tfCsqcdEfpDJJezy6NB85bd6/DBT2SeOBYAE41OuFaLsnTFDODxrqg/6bUJpkIvoodSREXwwFJ5N49p6o0A=="],
 
