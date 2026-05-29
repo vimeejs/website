@@ -23,7 +23,7 @@
     "react-dom": "19.2.6",
     "shiki": "4.0.2",
     "tailwindcss": "4.3.0",
-    "wrangler": "4.92.0"
+    "wrangler": "4.95.0"
   },
   "devDependencies": {
     "@types/react": "19.2.14",
