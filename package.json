@@ -19,7 +19,7 @@
     "@vimee/shiki-editor": "0.2.0",
     "astro": "6.3.3",
     "ogl": "1.0.11",
-    "react": "19.2.6",
+    "react": "19.2.7",
     "react-dom": "19.2.6",
     "shiki": "4.0.2",
     "tailwindcss": "4.3.0",
